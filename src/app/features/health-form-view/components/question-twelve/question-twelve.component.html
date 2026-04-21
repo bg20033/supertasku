@@ -1,0 +1,291 @@
+<article class="question-card question-twelve" [formGroup]="question()">
+  <div class="question-card__header">
+    <div>
+      <h3>{{ title() }}</h3>
+    </div>
+  </div>
+
+  <div class="diagnosis-entry__toggle">
+    <label class="diagnosis-entry__toggle-option">
+      <input
+        type="radio"
+        formControlName="answer"
+        value="no"
+        [attr.name]="questionInputId('answer')"
+      />
+      <span>Nein</span>
+    </label>
+
+    <label class="diagnosis-entry__toggle-option">
+      <input
+        type="radio"
+        formControlName="answer"
+        value="yes"
+        [attr.name]="questionInputId('answer')"
+      />
+      <span>Ja</span>
+    </label>
+  </div>
+
+  @if (
+    (question().get('answer')?.touched || question().get('answer')?.dirty) &&
+    !(question().get('answer')?.value | requiredValidation)
+  ) {
+    <span class="field-error">Bitte beantworten Sie diese Frage.</span>
+  }
+
+  @if (showDetails()) {
+    <div class="question-twelve__details" formArrayName="details">
+      @for (detail of details().controls; track $index) {
+        <section class="question-twelve__entry" [formGroup]="asGroup(detail)">
+          <div class="question-twelve__entry-header">
+            <p class="question-twelve__entry-title">
+              {{ $index + 1 }}) Bitte geben Sie alle zu dieser Frage relevanten
+              Medikamenten/Diagnosen an:
+            </p>
+
+            @if (details().length > 1) {
+              <button class="question-twelve__remove" type="button" (click)="requestRemove($index)">
+                Entfernen
+              </button>
+            }
+          </div>
+
+          <label class="question-twelve__field" [for]="detailInputId($index, 'name')">
+            <span>Name</span>
+            <textarea
+              class="question-twelve__control question-twelve__control--textarea"
+              [id]="detailInputId($index, 'name')"
+              formControlName="name"
+              placeholder="Hier eingeben..."
+            ></textarea>
+            @if (
+              (detail.get('name')?.touched || detail.get('name')?.dirty) &&
+              !(detail.get('name')?.value | requiredValidation)
+            ) {
+              <small class="field-error">Bitte einen Namen erfassen.</small>
+            }
+          </label>
+
+          <label class="question-twelve__field" [for]="detailInputId($index, 'amountPerDay')">
+            <span>Anzahl/Tag</span>
+            <textarea
+              class="question-twelve__control question-twelve__control--textarea"
+              [id]="detailInputId($index, 'amountPerDay')"
+              formControlName="amountPerDay"
+              placeholder="Hier eingeben..."
+            ></textarea>
+            @if (
+              (detail.get('amountPerDay')?.touched || detail.get('amountPerDay')?.dirty) &&
+              !(detail.get('amountPerDay')?.value | requiredValidation)
+            ) {
+              <small class="field-error">Bitte die Anzahl pro Tag erfassen.</small>
+            }
+          </label>
+
+          <label class="question-twelve__field" [for]="detailInputId($index, 'duration')">
+            <span>Duration</span>
+            <textarea
+              class="question-twelve__control question-twelve__control--textarea"
+              [id]="detailInputId($index, 'duration')"
+              formControlName="duration"
+              placeholder="Hier eingeben..."
+            ></textarea>
+            @if (
+              (detail.get('duration')?.touched || detail.get('duration')?.dirty) &&
+              !(detail.get('duration')?.value | requiredValidation)
+            ) {
+              <small class="field-error">Bitte die Dauer erfassen.</small>
+            }
+          </label>
+
+          <label class="question-twelve__field" [for]="detailInputId($index, 'condition')">
+            <span>
+              Diagnose/Krankheiten/Stoerungen/Beschwerden/Verletzung/betroffene Seite,
+              links/rechts/beidseits/Operation?
+            </span>
+            <textarea
+              class="question-twelve__control question-twelve__control--textarea"
+              [id]="detailInputId($index, 'condition')"
+              formControlName="condition"
+              placeholder="Hier eingeben..."
+            ></textarea>
+            @if (
+              (detail.get('condition')?.touched || detail.get('condition')?.dirty) &&
+              !(detail.get('condition')?.value | requiredValidation)
+            ) {
+              <small class="field-error">Bitte die Diagnose oder das Ereignis erfassen.</small>
+            }
+          </label>
+
+          <div class="question-twelve__dates">
+            <label class="question-twelve__field" [for]="detailInputId($index, 'from')">
+              <span>Beginn (Monat/Jahr)</span>
+              <div class="question-twelve__date-shell">
+                <input
+                  class="question-twelve__control question-twelve__control--date"
+                  [id]="detailInputId($index, 'from')"
+                  type="month"
+                  formControlName="from"
+                  placeholder="TT.MM.JJJJ"
+                />
+                <span class="question-twelve__icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" focusable="false">
+                    <path
+                      d="M7 2a1 1 0 0 1 1 1v1h8V3a1 1 0 1 1 2 0v1h1a3 3 0 0 1 3 3v11a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3h1V3a1 1 0 0 1 1-1Zm12 8H5v8a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-8ZM6 6a1 1 0 0 0-1 1v1h14V7a1 1 0 0 0-1-1h-1v1a1 1 0 1 1-2 0V6H8v1a1 1 0 1 1-2 0V6H6Z"
+                    />
+                  </svg>
+                </span>
+              </div>
+              @if (
+                (detail.get('from')?.touched || detail.get('from')?.dirty) &&
+                !(detail.get('from')?.value | requiredValidation)
+              ) {
+                <small class="field-error">Bitte den Beginn erfassen.</small>
+              }
+            </label>
+
+            <label class="question-twelve__field" [for]="detailInputId($index, 'to')">
+              <span>Ende (Monat/Jahr)</span>
+              <div class="question-twelve__date-shell">
+                <input
+                  class="question-twelve__control question-twelve__control--date"
+                  [id]="detailInputId($index, 'to')"
+                  type="month"
+                  formControlName="to"
+                  placeholder="TT.MM.JJJJ"
+                />
+                <span class="question-twelve__icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" focusable="false">
+                    <path
+                      d="M7 2a1 1 0 0 1 1 1v1h8V3a1 1 0 1 1 2 0v1h1a3 3 0 0 1 3 3v11a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3h1V3a1 1 0 0 1 1-1Zm12 8H5v8a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-8ZM6 6a1 1 0 0 0-1 1v1h14V7a1 1 0 0 0-1-1h-1v1a1 1 0 1 1-2 0V6H8v1a1 1 0 1 1-2 0V6H6Z"
+                    />
+                  </svg>
+                </span>
+              </div>
+            </label>
+          </div>
+
+          <div class="question-twelve__field question-twelve__field--full">
+            <span>Vollstaendig geheilt?</span>
+            <div class="question-twelve__toggle">
+              <label class="question-twelve__toggle-option">
+                <input
+                  type="radio"
+                  formControlName="recovered"
+                  value="no"
+                  [attr.name]="recoveredName($index)"
+                />
+                <span>Nein</span>
+              </label>
+
+              <label class="question-twelve__toggle-option">
+                <input
+                  type="radio"
+                  formControlName="recovered"
+                  value="yes"
+                  [attr.name]="recoveredName($index)"
+                />
+                <span>Ja</span>
+              </label>
+            </div>
+            @if (
+              (detail.get('recovered')?.touched || detail.get('recovered')?.dirty) &&
+              !(detail.get('recovered')?.value | requiredValidation)
+            ) {
+              <small class="field-error">Bitte Ja oder Nein auswaehlen.</small>
+            }
+          </div>
+
+          <div class="question-twelve__field question-twelve__field--full">
+            <span>Behandelnde/r Arzt/Aerztin, Therapeut/in</span>
+
+            <div class="question-twelve__doctor-grid">
+              <label class="question-twelve__field question-twelve__field--doctor-given">
+                <input
+                  class="question-twelve__control"
+                  [id]="detailInputId($index, 'doctorGivenNames')"
+                  type="text"
+                  formControlName="doctorGivenNames"
+                  placeholder="Dr.med.Johannes"
+                />
+              </label>
+
+              <label class="question-twelve__field question-twelve__field--doctor-family">
+                <input
+                  class="question-twelve__control"
+                  [id]="detailInputId($index, 'doctorFamilyName')"
+                  type="text"
+                  formControlName="doctorFamilyName"
+                  placeholder="Doktormann"
+                />
+              </label>
+
+              <label class="question-twelve__field question-twelve__field--street">
+                <input
+                  class="question-twelve__control"
+                  [id]="detailInputId($index, 'doctorStreet')"
+                  type="text"
+                  formControlName="doctorStreet"
+                  placeholder="Doktorstrasse"
+                />
+              </label>
+
+              <label class="question-twelve__field question-twelve__field--house-number">
+                <input
+                  class="question-twelve__control"
+                  [id]="detailInputId($index, 'doctorStreetNumber')"
+                  type="text"
+                  formControlName="doctorStreetNumber"
+                  placeholder="1"
+                />
+              </label>
+
+              <label class="question-twelve__field question-twelve__field--postal">
+                <input
+                  class="question-twelve__control"
+                  [id]="detailInputId($index, 'doctorPostalCode')"
+                  type="text"
+                  formControlName="doctorPostalCode"
+                  placeholder="8001"
+                />
+              </label>
+
+              <label class="question-twelve__field question-twelve__field--city">
+                <input
+                  class="question-twelve__control"
+                  [id]="detailInputId($index, 'doctorCity')"
+                  type="text"
+                  formControlName="doctorCity"
+                  placeholder="Zurich"
+                />
+              </label>
+            </div>
+          </div>
+
+          <label class="question-twelve__field" [for]="detailInputId($index, 'notes')">
+            <span>Besondere Bemerkungen:</span>
+            <textarea
+              class="question-twelve__control question-twelve__control--textarea"
+              [id]="detailInputId($index, 'notes')"
+              formControlName="notes"
+              placeholder="Hier eingeben..."
+            ></textarea>
+          </label>
+
+          @if (showDateOrderError(detail)) {
+            <small class="field-error">Das Ende darf nicht vor dem Beginn liegen.</small>
+          }
+        </section>
+      }
+
+      @if (
+        (details().touched || details().dirty) && !(details().controls | minItemsValidation: 1)
+      ) {
+        <span class="field-error">Bitte mindestens einen Eintrag erfassen.</span>
+      }
+
+      <button class="diagnosis-add-button" type="button" (click)="requestAdd()">+ Weitere</button>
+    </div>
+  }
+</article>

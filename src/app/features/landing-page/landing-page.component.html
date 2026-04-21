@@ -1,0 +1,32 @@
+<main class="landing-shell app-shell">
+  <section class="landing-frame">
+    <header class="landing-header">
+      <h1>Gesundheitsdeklaration</h1>
+      <button class="landing-menu" type="button" aria-label="Menue">
+        <mat-icon aria-hidden="true">menu</mat-icon>
+      </button>
+    </header>
+
+    <section class="landing-intro">
+      <div class="landing-avatar" aria-hidden="true">
+        <span class="landing-avatar__halo landing-avatar__halo--pink"></span>
+        <span class="landing-avatar__halo landing-avatar__halo--violet"></span>
+        <span class="landing-avatar__halo landing-avatar__halo--soft"></span>
+        <img class="landing-avatar__image" src="assets/agenti.png" alt="" />
+      </div>
+
+      <article class="landing-card">
+        @for (paragraph of introParagraphs; track paragraph) {
+          <p>{{ paragraph }}</p>
+        }
+      </article>
+    </section>
+
+    <app-form-footer
+      [backDisabled]="true"
+      nextLabel="Next"
+      [routerLink]="['/family']"
+      (next)="startDeclaration()"
+    />
+  </section>
+</main>

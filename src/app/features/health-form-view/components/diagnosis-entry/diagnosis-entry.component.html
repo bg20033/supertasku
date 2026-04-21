@@ -1,0 +1,208 @@
+<section class="diagnosis-entry" [formGroup]="group()">
+  @if (showHeader()) {
+    <div class="diagnosis-entry__header">
+      <h3>{{ title() }}</h3>
+
+      @if (canRemove()) {
+        <button class="diagnosis-entry__remove" type="button" (click)="requestRemove()">
+          Entfernen
+        </button>
+      }
+    </div>
+  }
+
+  <label class="diagnosis-entry__field diagnosis-entry__field--full" [for]="fieldId('condition')">
+    <span
+      >Diagnose/Krankheiten/Stoerungen/Beschwerden/Verletzung/betroffene Seite,
+      links/rechts/beidseits/Operation?</span
+    >
+    <textarea
+      class="diagnosis-entry__control diagnosis-entry__control--textarea"
+      [id]="fieldId('condition')"
+      formControlName="condition"
+      placeholder="Hier eingeben..."
+    ></textarea>
+    <small
+      class="diagnosis-entry__error"
+      [class.diagnosis-entry__error--visible]="
+        (control('condition')?.touched || control('condition')?.dirty) &&
+        !(control('condition')?.value | requiredValidation)
+      "
+    >
+      Bitte die Diagnose oder das Ereignis erfassen.
+    </small>
+  </label>
+
+  <div class="diagnosis-entry__dates">
+    <label class="diagnosis-entry__field" [for]="fieldId('from')">
+      <span>Beginn (Monat/Jahr)</span>
+      <div class="diagnosis-entry__date-shell">
+        <input
+          class="diagnosis-entry__control diagnosis-entry__control--date"
+          [id]="fieldId('from')"
+          type="month"
+          formControlName="from"
+        />
+        <span class="diagnosis-entry__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" focusable="false">
+            <path
+              d="M7 2a1 1 0 0 1 1 1v1h8V3a1 1 0 1 1 2 0v1h1a3 3 0 0 1 3 3v11a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3h1V3a1 1 0 0 1 1-1Zm12 8H5v8a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-8ZM6 6a1 1 0 0 0-1 1v1h14V7a1 1 0 0 0-1-1h-1v1a1 1 0 1 1-2 0V6H8v1a1 1 0 1 1-2 0V6H6Z"
+            />
+          </svg>
+        </span>
+      </div>
+      <small
+        class="diagnosis-entry__error"
+        [class.diagnosis-entry__error--visible]="
+          (control('from')?.touched || control('from')?.dirty) &&
+          !(control('from')?.value | requiredValidation)
+        "
+      >
+        Bitte den Beginn erfassen.
+      </small>
+    </label>
+
+    <label class="diagnosis-entry__field" [for]="fieldId('to')">
+      <span>Ende (Monat/Jahr)</span>
+      <div class="diagnosis-entry__date-shell">
+        <input
+          class="diagnosis-entry__control diagnosis-entry__control--date"
+          [id]="fieldId('to')"
+          type="month"
+          formControlName="to"
+        />
+        <span class="diagnosis-entry__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" focusable="false">
+            <path
+              d="M7 2a1 1 0 0 1 1 1v1h8V3a1 1 0 1 1 2 0v1h1a3 3 0 0 1 3 3v11a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3h1V3a1 1 0 0 1 1-1Zm12 8H5v8a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-8ZM6 6a1 1 0 0 0-1 1v1h14V7a1 1 0 0 0-1-1h-1v1a1 1 0 1 1-2 0V6H8v1a1 1 0 1 1-2 0V6H6Z"
+            />
+          </svg>
+        </span>
+      </div>
+    </label>
+  </div>
+
+  <div class="diagnosis-entry__field diagnosis-entry__field--full">
+    <span>Vollstaendig geheilt?</span>
+    <div class="diagnosis-entry__toggle">
+      <label class="diagnosis-entry__toggle-option">
+        <input type="radio" formControlName="recovered" value="no" [attr.name]="recoveredName()" />
+        <span>Nein</span>
+      </label>
+
+      <label class="diagnosis-entry__toggle-option">
+        <input type="radio" formControlName="recovered" value="yes" [attr.name]="recoveredName()" />
+        <span>Ja</span>
+      </label>
+    </div>
+    <small
+      class="diagnosis-entry__error"
+      [class.diagnosis-entry__error--visible]="
+        (control('recovered')?.touched || control('recovered')?.dirty) &&
+        !(control('recovered')?.value | requiredValidation)
+      "
+    >
+      Bitte Ja oder Nein auswaehlen.
+    </small>
+  </div>
+
+  <div class="diagnosis-entry__field diagnosis-entry__field--full">
+    <span>Behandelnde/r Arzt/Aerztin, Therapeut/in</span>
+    <div class="diagnosis-entry__doctor-grid">
+      <label
+        class="diagnosis-entry__field diagnosis-entry__field--doctor-given"
+        [for]="fieldId('doctorGivenNames')"
+      >
+        <input
+          class="diagnosis-entry__control"
+          [id]="fieldId('doctorGivenNames')"
+          type="text"
+          formControlName="doctorGivenNames"
+          placeholder="Dr.med.Johannes"
+        />
+      </label>
+
+      <label
+        class="diagnosis-entry__field diagnosis-entry__field--doctor-family"
+        [for]="fieldId('doctorFamilyName')"
+      >
+        <input
+          class="diagnosis-entry__control"
+          [id]="fieldId('doctorFamilyName')"
+          type="text"
+          formControlName="doctorFamilyName"
+          placeholder="Doktormann"
+        />
+      </label>
+
+      <label
+        class="diagnosis-entry__field diagnosis-entry__field--street"
+        [for]="fieldId('doctorStreet')"
+      >
+        <input
+          class="diagnosis-entry__control"
+          [id]="fieldId('doctorStreet')"
+          type="text"
+          formControlName="doctorStreet"
+          placeholder="Doktorstrasse"
+        />
+      </label>
+
+      <label
+        class="diagnosis-entry__field diagnosis-entry__field--house-number"
+        [for]="fieldId('doctorStreetNumber')"
+      >
+        <input
+          class="diagnosis-entry__control"
+          [id]="fieldId('doctorStreetNumber')"
+          type="text"
+          formControlName="doctorStreetNumber"
+          placeholder="1"
+        />
+      </label>
+
+      <label
+        class="diagnosis-entry__field diagnosis-entry__field--postal"
+        [for]="fieldId('doctorPostalCode')"
+      >
+        <input
+          class="diagnosis-entry__control"
+          [id]="fieldId('doctorPostalCode')"
+          type="text"
+          formControlName="doctorPostalCode"
+          placeholder="8001"
+        />
+      </label>
+
+      <label
+        class="diagnosis-entry__field diagnosis-entry__field--city"
+        [for]="fieldId('doctorCity')"
+      >
+        <input
+          class="diagnosis-entry__control"
+          [id]="fieldId('doctorCity')"
+          type="text"
+          formControlName="doctorCity"
+          placeholder="Zurich"
+        />
+      </label>
+    </div>
+  </div>
+
+  <label class="diagnosis-entry__field diagnosis-entry__field--full" [for]="fieldId('notes')">
+    <span>Besondere Bemerkungen:</span>
+    <textarea
+      class="diagnosis-entry__control diagnosis-entry__control--textarea diagnosis-entry__control--notes"
+      [id]="fieldId('notes')"
+      formControlName="notes"
+      placeholder="Hier eingeben..."
+    ></textarea>
+  </label>
+
+  <small
+    class="diagnosis-entry__error"
+    [class.diagnosis-entry__error--visible]="showDateOrderError()"
+  >
+    Das Ende darf nicht vor dem Beginn liegen.
+  </small>
+</section>

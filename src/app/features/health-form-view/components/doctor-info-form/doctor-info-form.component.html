@@ -1,0 +1,99 @@
+<article class="question-card" [formGroup]="group()">
+  <div class="question-card__header">
+    <div>
+      <h3>
+        2. Name und Adresse des Arztes/der Aerztin, der/die am besten ueber Ihre
+        Krankheitsgeschichte Auskunft geben kann:
+      </h3>
+    </div>
+  </div>
+
+  <div class="field-grid">
+    <div class="field" style="grid-column: span 12">
+      <label for="doctorPractice">Praxis/Spital</label>
+      <input
+        id="doctorPractice"
+        type="text"
+        formControlName="practiceName"
+        placeholder="Hier eingeben..."
+      />
+      @if (
+        (group().get('practiceName')?.touched || group().get('practiceName')?.dirty) &&
+        !(group().get('practiceName')?.value | requiredValidation)
+      ) {
+        <span class="field-error">Praxis oder Spital ist erforderlich.</span>
+      }
+    </div>
+
+    <div class="field" style="grid-column: span 6">
+      <label for="doctorFamilyName">Name</label>
+      <input id="doctorFamilyName" type="text" formControlName="familyName" placeholder="Name" />
+      @if (
+        (group().get('familyName')?.touched || group().get('familyName')?.dirty) &&
+        !(group().get('familyName')?.value | requiredValidation)
+      ) {
+        <span class="field-error">Der Name ist erforderlich.</span>
+      }
+    </div>
+
+    <div class="field" style="grid-column: span 6">
+      <label for="doctorGivenNames">Vornamen</label>
+      <input
+        id="doctorGivenNames"
+        type="text"
+        formControlName="givenNames"
+        placeholder="Vornamen"
+      />
+      @if (
+        (group().get('givenNames')?.touched || group().get('givenNames')?.dirty) &&
+        !(group().get('givenNames')?.value | requiredValidation)
+      ) {
+        <span class="field-error">Die Vornamen sind erforderlich.</span>
+      }
+    </div>
+
+    <div class="field" style="grid-column: span 7">
+      <label for="doctorStreet">Strasse</label>
+      <input id="doctorStreet" type="text" formControlName="street" placeholder="Strasse" />
+      @if (
+        (group().get('street')?.touched || group().get('street')?.dirty) &&
+        !(group().get('street')?.value | requiredValidation)
+      ) {
+        <span class="field-error">Die Strasse ist erforderlich.</span>
+      }
+    </div>
+
+    <div class="field" style="grid-column: span 5">
+      <label for="doctorStreetNumber">Nr.</label>
+      <input id="doctorStreetNumber" type="text" formControlName="streetNumber" placeholder="Nr." />
+      @if (
+        (group().get('streetNumber')?.touched || group().get('streetNumber')?.dirty) &&
+        !(group().get('streetNumber')?.value | requiredValidation)
+      ) {
+        <span class="field-error">Die Hausnummer ist erforderlich.</span>
+      }
+    </div>
+
+    <div class="field" style="grid-column: span 4">
+      <label for="doctorPostalCode">PLZ</label>
+      <input id="doctorPostalCode" type="number" formControlName="postalCode" placeholder="PLZ" />
+      @if (
+        (group().get('postalCode')?.touched || group().get('postalCode')?.dirty) &&
+        !(group().get('postalCode')?.value | requiredValidation)
+      ) {
+        <span class="field-error">Die PLZ ist erforderlich.</span>
+      }
+    </div>
+
+    <div class="field" style="grid-column: span 8">
+      <label for="doctorCity">Ort</label>
+      <input id="doctorCity" type="text" formControlName="city" placeholder="Ort" />
+      @if (
+        (group().get('city')?.touched || group().get('city')?.dirty) &&
+        !(group().get('city')?.value | requiredValidation)
+      ) {
+        <span class="field-error">Der Ort ist erforderlich.</span>
+      }
+    </div>
+  </div>
+</article>

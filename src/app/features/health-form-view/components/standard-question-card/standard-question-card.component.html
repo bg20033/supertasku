@@ -1,0 +1,76 @@
+<article class="question-card" [formGroup]="group()">
+  <div class="question-card__header">
+    <div>
+      <h3>{{ title() }}</h3>
+    </div>
+  </div>
+
+  @if (questionType() === 'yes_no' || questionType() === 'yes_no_with_details') {
+    <div class="diagnosis-entry__toggle">
+      <label class="diagnosis-entry__toggle-option">
+        <input type="radio" formControlName="answer" value="no" [attr.name]="inputId('answer')" />
+        <span>Nein</span>
+      </label>
+      <label class="diagnosis-entry__toggle-option">
+        <input type="radio" formControlName="answer" value="yes" [attr.name]="inputId('answer')" />
+        <span>Ja</span>
+      </label>
+    </div>
+    @if (
+      (group().get('answer')?.touched || group().get('answer')?.dirty) &&
+      !(group().get('answer')?.value | requiredValidation)
+    ) {
+      <span class="field-error">Bitte beantworten Sie diese Frage.</span>
+    }
+  }
+
+  @if (questionType() === 'text') {
+    <div class="field">
+      <textarea
+        [id]="inputId()"
+        formControlName="textValue"
+        placeholder="Hier eingeben..."
+      ></textarea>
+      @if (
+        (group().get('textValue')?.touched || group().get('textValue')?.dirty) &&
+        !(group().get('textValue')?.value | requiredValidation)
+      ) {
+        <span class="field-error">Bitte die zusaetzlichen Angaben erfassen.</span>
+      }
+    </div>
+  }
+
+  @if (questionType() === 'date') {
+    <div class="field">
+      <input [id]="inputId()" type="date" formControlName="dateValue" />
+      @if (
+        (group().get('dateValue')?.touched || group().get('dateValue')?.dirty) &&
+        !(group().get('dateValue')?.value | requiredValidation)
+      ) {
+        <span class="field-error">Bitte ein Datum erfassen.</span>
+      }
+    </div>
+  }
+
+  @if (showDetails()) {
+    <div class="details-stack" formArrayName="details">
+      @for (detail of details().controls; track $index) {
+        <app-diagnosis-entry
+          [group]="asGroup(detail)"
+          [index]="$index"
+          [entryKey]="entryKey($index)"
+          [canRemove]="details().length > 1"
+          (removeRequested)="requestRemove($index)"
+        />
+      }
+      @if (
+        (details().touched || details().dirty) && !(details().controls | minItemsValidation: 1)
+      ) {
+        <span class="field-error">Bitte mindestens einen Diagnose-Eintrag erfassen.</span>
+      }
+      <button class="diagnosis-add-button" type="button" (click)="requestAdd()">
+        + Weitere Diagnose
+      </button>
+    </div>
+  }
+</article>

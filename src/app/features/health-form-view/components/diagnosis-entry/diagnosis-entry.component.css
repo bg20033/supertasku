@@ -1,0 +1,220 @@
+:host {
+  display: block;
+  min-width: 0;
+}
+
+:host *,
+:host *::before,
+:host *::after {
+  box-sizing: border-box;
+}
+
+.diagnosis-entry {
+  display: grid;
+  gap: 1rem;
+}
+
+.diagnosis-entry__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.diagnosis-entry__header h3 {
+  margin: 0;
+  min-width: 0;
+  font-family: 'Roboto', sans-serif;
+  font-size: 1.12rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  overflow-wrap: anywhere;
+}
+
+.diagnosis-entry__remove {
+  flex: 0 0 auto;
+  align-self: flex-start;
+  border: 0;
+  background: transparent;
+  color: #ff0000;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.diagnosis-entry__field {
+  display: grid;
+  gap: 0.55rem;
+  min-width: 0;
+  align-content: start;
+}
+
+.diagnosis-entry__field > span {
+  color: #726d78;
+  font-size: 0.95rem;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+}
+
+.diagnosis-entry__field--full {
+  width: 100%;
+}
+
+.diagnosis-entry__dates,
+.diagnosis-entry__doctor-grid {
+  display: grid;
+  gap: 0.9rem;
+  min-width: 0;
+}
+
+.diagnosis-entry__dates {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.diagnosis-entry__doctor-grid {
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  align-items: start;
+}
+
+.diagnosis-entry__doctor-grid > * {
+  min-width: 0;
+}
+
+.diagnosis-entry__field--doctor-given,
+.diagnosis-entry__field--doctor-family {
+  grid-column: span 6;
+}
+
+.diagnosis-entry__field--street {
+  grid-column: span 5;
+}
+
+.diagnosis-entry__field--house-number {
+  grid-column: span 2;
+}
+
+.diagnosis-entry__field--postal {
+  grid-column: span 2;
+}
+
+.diagnosis-entry__field--city {
+  grid-column: span 3;
+}
+
+.diagnosis-entry__control {
+  width: 100%;
+  min-width: 0;
+  min-height: var(--control-height);
+  height: var(--control-height);
+  padding: 0.45rem 0.75rem;
+  border-radius: 10px;
+  border: 1px solid #7d29de;
+  background: #e6d9f4;
+  color: #16121d;
+  font-size: 0.98rem;
+  font-weight: 600;
+  line-height: 1.25;
+  outline: none;
+  transition:
+    border-color 140ms ease,
+    box-shadow 140ms ease,
+    transform 140ms ease;
+}
+
+.diagnosis-entry__control::placeholder {
+  color: #16121d;
+  opacity: 1;
+}
+
+.diagnosis-entry__control:focus {
+  box-shadow: 0 0 0 4px rgba(135, 54, 244, 0.14);
+}
+
+.diagnosis-entry__control--textarea {
+  min-height: var(--control-height);
+  height: var(--control-height);
+  resize: none;
+  overflow: auto;
+}
+
+.diagnosis-entry__control--notes {
+  min-height: var(--control-height);
+  height: var(--control-height);
+}
+
+.diagnosis-entry__date-shell {
+  position: relative;
+  min-width: 0;
+}
+
+.diagnosis-entry__control--date {
+  appearance: none;
+  -webkit-appearance: none;
+  padding-right: 3.25rem;
+}
+
+.diagnosis-entry__control--date::-webkit-calendar-picker-indicator {
+  opacity: 0;
+}
+
+.diagnosis-entry__icon {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  width: 1.5rem;
+  height: 1.5rem;
+  transform: translateY(-50%);
+  color: #a18abc;
+  pointer-events: none;
+}
+
+.diagnosis-entry__icon svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  fill: currentColor;
+}
+
+.diagnosis-entry__error {
+  display: block;
+  min-height: 1.1rem;
+  color: #a33d67;
+  font-size: 0.88rem;
+  line-height: 1.2;
+  visibility: hidden;
+}
+
+.diagnosis-entry__error--visible {
+  visibility: visible;
+}
+
+@media (max-width: 760px) {
+  .diagnosis-entry__dates {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .diagnosis-entry__doctor-grid {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: 0.75rem;
+  }
+
+  .diagnosis-entry__field--doctor-given,
+  .diagnosis-entry__field--doctor-family {
+    grid-column: span 6;
+  }
+
+  .diagnosis-entry__field--street {
+    grid-column: span 8;
+  }
+
+  .diagnosis-entry__field--house-number {
+    grid-column: span 4;
+  }
+
+  .diagnosis-entry__field--postal {
+    grid-column: span 3;
+  }
+
+  .diagnosis-entry__field--city {
+    grid-column: span 9;
+  }
+}

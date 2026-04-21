@@ -1,0 +1,242 @@
+<main class="app-shell family-shell">
+  <section class="surface-panel m-2 family-panel">
+    <header class="family-stepper" aria-label="Einrichtungsfortschritt">
+      @for (step of setupSteps; track step.number) {
+        <div class="family-stepper__step" [class.is-active]="step.active">
+          <span class="family-stepper__dot">{{ step.number }}</span>
+          <span class="family-stepper__label">{{ step.label }}</span>
+        </div>
+      }
+    </header>
+
+    <section class="family-location-card" aria-label="Wohnort">
+      <label class="field ps-6 pb-0 pt-3" for="locationFilter">PLZ/Ort</label>
+      <div class="location-input px-2">
+        <input
+          id="locationFilter"
+          type="text"
+          inputmode="text"
+          placeholder="PLZ oder Ort eingeben..."
+          [value]="searchQuery()"
+          [class.field-error]="!isLocationSelected() && searchQuery().length > 0"
+          (input)="onSearchInput($event)"
+          (blur)="onBlur()"
+          (focus)="onFocus()"
+          autocomplete="off"
+        />
+        @if (!isLocationSelected() && searchQuery().length > 0) {
+          <span class="field-error">Bitte wählen Sie einen Ort aus der Liste aus.</span>
+        }
+
+        @if (isLoading()) {
+          <div class="location-loading">Suche...</div>
+        }
+
+        @if (isDropdownOpen() && filteredLocations().length > 0) {
+          <ul class="location-dropdown">
+            @for (location of filteredLocations(); track location.locationId) {
+              <li
+                class="location-option"
+                [class.is-selected]="location.locationId === selectedLocationId()"
+                (click)="selectLocation(location)"
+              >
+                <span class="location-zip">{{ location.zipCode }}</span>
+                <span class="location-name">{{ location.locationName }}</span>
+                <span class="location-canton">{{ location.cantonName }}</span>
+              </li>
+            }
+          </ul>
+        }
+      </div>
+    </section>
+
+    <section class="family-members">
+      @for (person of people.controls; track trackByPerson($index, person)) {
+        @if (isEditing($index, person)) {
+          <article class="family-member family-member--editor" [formGroup]="profileGroup(person)">
+            <div class="family-member__editor">
+              <div class="family-member__avatar-shell">
+                <img
+                  class="family-member__avatar"
+                  [src]="avatarSrc(person)"
+                  [alt]="avatarAlt(person)"
+                />
+              </div>
+              <div
+                class="family-gender-group"
+                role="radiogroup"
+                [attr.aria-label]="'Geschlecht Person ' + ($index + 1)"
+              >
+                @for (option of genderOptions; track option.value) {
+                  <label
+                    class="family-gender-option"
+                    [class.family-gender-option--icon]="option.value === 'baby'"
+                  >
+                    <input
+                      type="radio"
+                      formControlName="gender"
+                      [value]="option.value"
+                      [attr.name]="'gender-' + $index"
+                    />
+                    @if (option.value === 'baby') {
+                      <span class="max-w-10">
+                        <img src="assets/babyIcon.png" alt="" aria-hidden="true" />
+                      </span>
+                    } @else {
+                      <span class="">
+                        <strong
+                          class="family-gender-option__symbol"
+                          [class.family-gender-option__symbol--female]="option.value === 'female'"
+                          [class.family-gender-option__symbol--male]="option.value === 'male'"
+                        >
+                          {{ option.value === 'female' ? '♀' : '♂' }}
+                        </strong>
+                        <span class="family-gender-label border-0! min-h-5! h-7.5!">{{
+                          option.label
+                        }}</span>
+                      </span>
+                    }
+                  </label>
+                }
+              </div>
+
+              <div class="field family-member__year-field">
+                <div class="family-member__year-shell">
+                  <input
+                    id="birthDate-{{ $index }}"
+                    type="text"
+                    inputmode="numeric"
+                    maxlength="4"
+                    formControlName="birthDate"
+                    placeholder="1960"
+                    (input)="handleProfileDraftChange($index)"
+                    (blur)="handleProfileDraftChange($index)"
+                  />
+                  <span class="family-member__year-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24">
+                      <path
+                        d="M7 2a1 1 0 0 1 1 1v1h8V3a1 1 0 1 1 2 0v1h1a3 3 0 0 1 3 3v11a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3h1V3a1 1 0 0 1 1-1Zm12 8H5v8a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-8ZM6 6a1 1 0 0 0-1 1v1h14V7a1 1 0 0 0-1-1h-1v1a1 1 0 1 1-2 0V6H8v1a1 1 0 1 1-2 0V6H6Z"
+                      />
+                    </svg>
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            @if (
+              ((profileGroup(person).get('gender')?.touched ||
+                profileGroup(person).get('gender')?.dirty) &&
+                !(profileGroup(person).get('gender')?.value | requiredValidation)) ||
+              ((profileGroup(person).get('birthDate')?.touched ||
+                profileGroup(person).get('birthDate')?.dirty) &&
+                !(profileGroup(person).get('birthDate')?.value | requiredValidation)) ||
+              ((profileGroup(person).get('birthDate')?.touched ||
+                profileGroup(person).get('birthDate')?.dirty) &&
+                !(profileGroup(person).get('birthDate')?.value | birthYearValidation)) ||
+              ((profileGroup(person).get('birthDate')?.touched ||
+                profileGroup(person).get('birthDate')?.dirty) &&
+                !(profileGroup(person).get('birthDate')?.value | babyAgeValidation))
+            ) {
+              <div class="family-member__errors">
+                @if (
+                  (profileGroup(person).get('gender')?.touched ||
+                    profileGroup(person).get('gender')?.dirty) &&
+                  !(profileGroup(person).get('gender')?.value | requiredValidation)
+                ) {
+                  <span class="field-error">Bitte waehlen Sie ein Geschlecht.</span>
+                }
+                @if (
+                  (profileGroup(person).get('birthDate')?.touched ||
+                    profileGroup(person).get('birthDate')?.dirty) &&
+                  !(profileGroup(person).get('birthDate')?.value | requiredValidation)
+                ) {
+                  <span class="field-error">Das Geburtsjahr ist erforderlich.</span>
+                } @else if (
+                  (profileGroup(person).get('birthDate')?.touched ||
+                    profileGroup(person).get('birthDate')?.dirty) &&
+                  !(profileGroup(person).get('birthDate')?.value | birthYearValidation)
+                ) {
+                  <span class="field-error">
+                    Bitte ein gueltiges Geburtsjahr fuer ein Alter zwischen 0 und 120 Jahren
+                    eingeben.
+                  </span>
+                } @else if (
+                  (profileGroup(person).get('birthDate')?.touched ||
+                    profileGroup(person).get('birthDate')?.dirty) &&
+                  !(profileGroup(person).get('birthDate')?.value | babyAgeValidation)
+                ) {
+                  <span class="field-error">
+                    Fuer Babys darf das Geburtsjahr nur das aktuelle Jahr sein.
+                  </span>
+                }
+              </div>
+            }
+          </article>
+        } @else {
+          <article class="family-member family-member--summary">
+            <div class="family-member__summary">
+              <div class="family-member__identity">
+                <div class="family-member__avatar-shell">
+                  <img
+                    class="family-member__avatar"
+                    [src]="avatarSrc(person)"
+                    [alt]="avatarAlt(person)"
+                  />
+                </div>
+                <span class="family-member__year">{{ birthYearDisplay(person) }}</span>
+              </div>
+
+              <div class="family-member__actions">
+                <button
+                  class="family-member__action family-member__action--edit"
+                  type="button"
+                  (click)="editPerson($index)"
+                  aria-label="Person bearbeiten"
+                >
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path
+                      d="m4 16.25 9.2-9.2 3.75 3.75-9.2 9.2H4v-3.75Zm10.6-10.6 1.85-1.85a1.5 1.5 0 0 1 2.1 0l1.65 1.65a1.5 1.5 0 0 1 0 2.1l-1.85 1.85-3.75-3.75Z"
+                    />
+                  </svg>
+                </button>
+                @if ($index > 0) {
+                  <button
+                    class="family-member__action family-member__action--delete"
+                    type="button"
+                    (click)="removePerson($index)"
+                    aria-label="Person entfernen"
+                  >
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path
+                        d="M9 3h6l1 2h4v2H4V5h4l1-2Zm1 6h2v8h-2V9Zm4 0h2v8h-2V9ZM7 9h2v8H7V9Zm-1 12a2 2 0 0 1-2-2V8h16v11a2 2 0 0 1-2 2H6Z"
+                      />
+                    </svg>
+                  </button>
+                }
+              </div>
+            </div>
+          </article>
+        }
+      }
+    </section>
+
+    <footer class="family-footer">
+      <button
+        class="button button-primary family-footer__button family-footer__button--primary"
+        type="button"
+        (click)="addPerson()"
+      >
+        + Person hinzufuegen
+      </button>
+    </footer>
+  </section>
+
+  <app-form-footer
+    [backDisabled]="true"
+    [nextDisabled]="!isFamilySetupValid()"
+    nextLabel="Weiter"
+    [routerLink]="['/health']"
+    [backRouterLink]="['/']"
+    (next)="startQuestionnaire()"
+  />
+</main>

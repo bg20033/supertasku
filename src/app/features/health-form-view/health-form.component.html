@@ -1,0 +1,735 @@
+<main class="app-shell health-shell">
+  <section class="pb-0">
+    <app-topbar />
+  </section>
+
+  <div class="wizard-body pt-0">
+    <section class="surface-panel wizard-panel">
+      @if (declaration.reviewMode()) {
+        <app-review-panel />
+      } @else {
+        @if (activePerson(); as person) {
+          <section class="section-stack">
+            <section class="question-stack">
+              @for (key of openingQuestionKeys; track key) {
+                @if (questionControl(person, key); as question) {
+                  @if (showQuestion(person, question)) {
+                    <app-standard-question-card
+                      [group]="asGroup(question)"
+                      [title]="questionTitle(question)"
+                      [personIndex]="declaration.currentPersonIndex()"
+                      [questionType]="questionType(question)"
+                      [showDetails]="showDiagnosisDetails(question)"
+                      (addRequested)="addDiagnosis(question)"
+                      (removeRequested)="removeDiagnosis(question, $event)"
+                    />
+                  }
+                }
+              }
+              <app-doctor-info-form [group]="doctorInfoGroup(person)" />
+
+              <app-body-metrics-form [group]="bodyMetricsGroup(person)" />
+
+              @for (key of medicalHistoryQuestionKeys; track key) {
+                @if (key === '8') {
+                  @if (questionControl(person, '8'); as question) {
+                    @if (showQuestion(person, question)) {
+                      <app-question-seven
+                        [operationQuestion]="asGroup(question)"
+                        [title]="'7. Hatten Sie jemals einen ambulanten oder stationaeren Eingriff/Operation? Wenn ja, warum?'"
+                        [personIndex]="declaration.currentPersonIndex()"
+                        (addRequested)="addDiagnosis(question)"
+                        (removeRequested)="removeDiagnosis(question, $event)"
+                      />
+                    }
+                  }
+                } @else if (shouldRenderGenericMedicalHistoryQuestion(key)) {
+                  @if (questionControl(person, key); as question) {
+                    @if (showQuestion(person, question)) {
+                      <app-standard-question-card
+                        [group]="asGroup(question)"
+                        [title]="questionTitle(question)"
+                        [personIndex]="declaration.currentPersonIndex()"
+                        [questionType]="questionType(question)"
+                        [showDetails]="showDiagnosisDetails(question)"
+                        (addRequested)="addDiagnosis(question)"
+                        (removeRequested)="removeDiagnosis(question, $event)"
+                      />
+                    }
+                  }
+                }
+              }
+
+              @if (questionControl(person, '11'); as question) {
+                @if (showQuestion(person, question)) {
+                  <article class="question-card" [formGroup]="asGroup(question)">
+                    <div class="question-card__header">
+                      <div>
+                        <h3>{{ questionTitle(question) }}</h3>
+                      </div>
+                    </div>
+                    <div class="diagnosis-entry__toggle">
+                      <label class="diagnosis-entry__toggle-option">
+                        <input
+                          type="radio"
+                          formControlName="answer"
+                          value="no"
+                          [attr.name]="questionInputId(question, 'answer')"
+                        />
+                        <span>Nein</span>
+                      </label>
+                      <label class="diagnosis-entry__toggle-option">
+                        <input
+                          type="radio"
+                          formControlName="answer"
+                          value="yes"
+                          [attr.name]="questionInputId(question, 'answer')"
+                        />
+                        <span>Ja</span>
+                      </label>
+                    </div>
+                    @if (shouldShowPregnancyFields(person)) {
+                      <div class="field-grid pregnancy-grid" [formGroup]="dentalInfoGroup(person)">
+                        <div class="field" style="grid-column: span 6">
+                          <label for="pregnancyDate">Geburtsdatum</label>
+                          <input
+                            class="diagnosis-entry__control"
+                            id="pregnancyDate"
+                            type="date"
+                            formControlName="pregnancyDate"
+                          />
+                        </div>
+                        <div class="field" style="grid-column: span 6">
+                          <label for="pregnancyWeightBefore">Gewicht vor Schwangerschaft</label>
+                          <input
+                            class="diagnosis-entry__control"
+                            id="pregnancyWeightBefore"
+                            type="number"
+                            min="0"
+                            max="200"
+                            step="0.1"
+                            inputmode="decimal"
+                            formControlName="pregnancyWeightBefore"
+                            placeholder="Hier eingeben..."
+                          />
+                          @if (
+                            (dentalInfoGroup(person).get('pregnancyWeightBefore')?.touched ||
+                              dentalInfoGroup(person).get('pregnancyWeightBefore')?.dirty) &&
+                            !(
+                              dentalInfoGroup(person).get('pregnancyWeightBefore')?.value
+                              | requiredValidation
+                            )
+                          ) {
+                            <span class="field-error"
+                              >Das Gewicht vor der Schwangerschaft ist erforderlich.</span
+                            >
+                          } @else if (
+                            (dentalInfoGroup(person).get('pregnancyWeightBefore')?.touched ||
+                              dentalInfoGroup(person).get('pregnancyWeightBefore')?.dirty) &&
+                            !(
+                              dentalInfoGroup(person).get('pregnancyWeightBefore')?.value
+                              | numericRangeValidation: 0 : 200
+                            )
+                          ) {
+                            <span class="field-error"
+                              >Das Gewicht muss zwischen 0 und 200 kg liegen.</span
+                            >
+                          }
+                        </div>
+                      </div>
+                    }
+                  </article>
+                }
+              }
+
+              @if (questionControl(person, '12'); as question) {
+                @if (showQuestion(person, question)) {
+                  <app-question-twelve
+                    [question]="asGroup(question)"
+                    [title]="questionTitle(question)"
+                    [personIndex]="declaration.currentPersonIndex()"
+                    (addRequested)="addDiagnosis(question)"
+                    (removeRequested)="removeDiagnosis(question, $event)"
+                  />
+                }
+              }
+              @if (questionControl(person, '13'); as question) {
+                @if (showQuestion(person, question)) {
+                  <article class="question-card" [formGroup]="asGroup(question)">
+                    <div class="question-card__header">
+                      <div>
+                        <h3>{{ questionTitle(question) }}</h3>
+                      </div>
+                    </div>
+                    <div class="diagnosis-entry__toggle">
+                      <label class="diagnosis-entry__toggle-option">
+                        <input
+                          type="radio"
+                          formControlName="answer"
+                          value="no"
+                          [attr.name]="questionInputId(question, 'answer')"
+                        />
+                        <span>Nein</span>
+                      </label>
+                      <label class="diagnosis-entry__toggle-option">
+                        <input
+                          type="radio"
+                          formControlName="answer"
+                          value="yes"
+                          [attr.name]="questionInputId(question, 'answer')"
+                        />
+                        <span>Ja</span>
+                      </label>
+                    </div>
+                    @if (shouldShowLifestyleFields(person)) {
+                      <div class="lifestyle-substance-list" [formGroup]="lifestyleGroup(person)">
+                        @for (substance of lifestyleSubstances; track substance.key) {
+                          <section class="lifestyle-substance">
+                            <label
+                              class="lifestyle-substance__row"
+                              [for]="lifestyleInputId(substance.useControl)"
+                            >
+                              <span class="lifestyle-substance__label">{{ substance.label }}</span>
+                              <input
+                                class="lifestyle-substance__checkbox"
+                                [id]="lifestyleInputId(substance.useControl)"
+                                type="checkbox"
+                                [formControlName]="substance.useControl"
+                              />
+                            </label>
+
+                            @if (isChecked(lifestyleGroup(person), substance.useControl)) {
+                              <div class="lifestyle-substance__details">
+                                <div class="field">
+                                  <input
+                                    [id]="lifestyleInputId(substance.unitsControl)"
+                                    type="text"
+                                    [formControlName]="substance.unitsControl"
+                                    placeholder="Stückzahl/Einheiten etc..."
+                                  />
+                                </div>
+                                <div class="field">
+                                  <input
+                                    [id]="lifestyleInputId(substance.frequencyControl)"
+                                    type="text"
+                                    [formControlName]="substance.frequencyControl"
+                                    placeholder="pro Tag/Woche/Monat/Jahr"
+                                  />
+                                </div>
+                                <div class="lifestyle-substance__dates">
+                                  <label
+                                    class="lifestyle-substance__date-field"
+                                    [for]="lifestyleInputId(substance.fromControl)"
+                                  >
+                                    <span>Dauer von</span>
+                                    <div class="lifestyle-substance__date-shell">
+                                      <input
+                                        class="lifestyle-substance__date-input"
+                                        [id]="lifestyleInputId(substance.fromControl)"
+                                        type="date"
+                                        [formControlName]="substance.fromControl"
+                                      />
+                                      <span
+                                        class="lifestyle-substance__date-icon"
+                                        aria-hidden="true"
+                                      >
+                                        <svg viewBox="0 0 24 24" focusable="false">
+                                          <path
+                                            d="M7 2a1 1 0 0 1 1 1v1h8V3a1 1 0 1 1 2 0v1h1a3 3 0 0 1 3 3v11a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3h1V3a1 1 0 0 1 1-1Zm12 8H5v8a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-8ZM6 6a1 1 0 0 0-1 1v1h14V7a1 1 0 0 0-1-1h-1v1a1 1 0 1 1-2 0V6H8v1a1 1 0 1 1-2 0V6H6Z"
+                                          />
+                                        </svg>
+                                      </span>
+                                    </div>
+                                  </label>
+
+                                  <label
+                                    class="lifestyle-substance__date-field"
+                                    [for]="lifestyleInputId(substance.toControl)"
+                                  >
+                                    <span>bis</span>
+                                    <div class="lifestyle-substance__date-shell">
+                                      <input
+                                        class="lifestyle-substance__date-input"
+                                        [id]="lifestyleInputId(substance.toControl)"
+                                        type="date"
+                                        [formControlName]="substance.toControl"
+                                      />
+                                      <span
+                                        class="lifestyle-substance__date-icon"
+                                        aria-hidden="true"
+                                      >
+                                        <svg viewBox="0 0 24 24" focusable="false">
+                                          <path
+                                            d="M7 2a1 1 0 0 1 1 1v1h8V3a1 1 0 1 1 2 0v1h1a3 3 0 0 1 3 3v11a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3h1V3a1 1 0 0 1 1-1Zm12 8H5v8a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-8ZM6 6a1 1 0 0 0-1 1v1h14V7a1 1 0 0 0-1-1h-1v1a1 1 0 1 1-2 0V6H8v1a1 1 0 1 1-2 0V6H6Z"
+                                          />
+                                        </svg>
+                                      </span>
+                                    </div>
+                                  </label>
+                                </div>
+                              </div>
+                            }
+                          </section>
+                        }
+                      </div>
+                    }
+                  </article>
+                }
+              }
+              <article class="question-card" [formGroup]="dentalInfoGroup(person)">
+                <div class="question-card__header">
+                  <div>
+                    <h3>14. Gewuenschte Stufe DENTA</h3>
+                  </div>
+                </div>
+                <div class="field" style="grid-column: span 12">
+                  <div class="estimate-picker">
+                    @for (option of dentaOptions; track option) {
+                      <label class="segment-option estimate-picker__option">
+                        <input
+                          type="radio"
+                          formControlName="desiredLevel"
+                          [value]="option"
+                          [attr.name]="'desired-level-' + declaration.currentPersonIndex()"
+                        />
+                        <span>{{ option }}</span>
+                      </label>
+                    }
+                  </div>
+                </div>
+              </article>
+              <article class="question-card" [formGroup]="dentalInfoGroup(person)">
+                <div class="question-card__header">
+                  <div>
+                    <h3>15. Befund vom</h3>
+                  </div>
+                </div>
+                <div class="dental-finding">
+                  <div class="field dental-finding__notes">
+                    <textarea
+                      class="diagnosis-entry__control diagnosis-entry__control--textarea"
+                      id="toothStatusNotes"
+                      formControlName="toothStatusNotes"
+                      placeholder="Hier eingeben..."
+                    ></textarea>
+                  </div>
+                  <div class="dental-finding__legend-block">
+                    <p class="dental-finding__legend-title">
+                      Zustand der Zaehne - Bitte im Zahnschema folgende Angaben eintragen
+                    </p>
+                    <img
+                      class="dental-finding__legend-image"
+                      src="assets/1list.svg"
+                      alt="Legende fuer den Zahnstatus"
+                    />
+                  </div>
+                  <div class="dental-finding__chart">
+                    <div class="dental-finding__numbers">
+                      @for (label of dentalChartLabels; track $index) {
+                        <span>{{ label }}</span>
+                      }
+                    </div>
+                    <div class="dental-finding__grid dental-finding__grid--upper">
+                      @for (_label of dentalChartLabels; track $index) {
+                        <span class="dental-finding__cell"></span>
+                      }
+                    </div>
+
+                    <div class="dental-finding__image-shell">
+                      <img
+                        class="dental-finding__teeth-image"
+                        src="assets/teeth.png"
+                        alt="Zahnschema"
+                      />
+                    </div>
+
+                    <div class="dental-finding__grid dental-finding__grid--lower">
+                      @for (_label of dentalChartLabels; track $index) {
+                        <span class="dental-finding__cell"></span>
+                      }
+                    </div>
+
+                    <div class="dental-finding__numbers dental-finding__numbers--bottom">
+                      @for (label of dentalChartLabels; track $index) {
+                        <span>{{ label }}</span>
+                      }
+                    </div>
+                  </div>
+                  <input
+                    id="findingDate"
+                    class="dental-finding__date-input"
+                    type="hidden"
+                    formControlName="findingDate"
+                  />
+                  <div class="field dental-finding__condition">
+                    <label class="fieldset-label">Zustand der Kronen, Bruecken und Prothesen</label>
+                    <div class="three-option-toggle">
+                      @for (option of conditionOptions; track option) {
+                        <label class="three-option-toggle-option">
+                          <input
+                            type="radio"
+                            formControlName="prosthesesCondition"
+                            [value]="option"
+                            [attr.name]="'prostheses-condition-' + declaration.currentPersonIndex()"
+                          />
+                          <span>{{ option }}</span>
+                        </label>
+                      }
+                    </div>
+                  </div>
+                  @if (
+                    text(dentalInfoGroup(person), 'prosthesesCondition') === 'Mittel' ||
+                    text(dentalInfoGroup(person), 'prosthesesCondition') === 'Schlecht'
+                  ) {
+                    <div class="field dental-finding__reason">
+                      <label for="prosthesesReason"
+                        >Wenn mittelmaessig oder schlecht, weshalb?</label
+                      >
+                      <textarea
+                        class="diagnosis-entry__control diagnosis-entry__control--textarea"
+                        id="prosthesesReason"
+                        formControlName="prosthesesReason"
+                        placeholder="Hier eingeben..."
+                      ></textarea>
+                    </div>
+                  }
+                </div>
+              </article>
+
+              @if (questionControl(person, '16'); as question) {
+                @if (showQuestion(person, question)) {
+                  <article class="question-card" [formGroup]="asGroup(question)">
+                    <div class="question-card__header">
+                      <div>
+                        <h3>16. Parodontitis</h3>
+                      </div>
+                    </div>
+                    <div class="diagnosis-entry__toggle">
+                      <label class="diagnosis-entry__toggle-option">
+                        <input
+                          type="radio"
+                          formControlName="answer"
+                          value="no"
+                          [attr.name]="questionInputId(question, 'answer')"
+                        />
+                        <span>Nein</span>
+                      </label>
+                      <label class="diagnosis-entry__toggle-option">
+                        <input
+                          type="radio"
+                          formControlName="answer"
+                          value="yes"
+                          [attr.name]="questionInputId(question, 'answer')"
+                        />
+                        <span>Ja</span>
+                      </label>
+                    </div>
+                    @if (shouldShowParodontitisFields(person)) {
+                      <div class="parodontitis-section" [formGroup]="dentalInfoGroup(person)">
+                        <div class="field parodontitis-section__bleeding">
+                          <label class="fieldset-label">Zahnfleischbluten</label>
+                          <div class="question-options-grid parodontitis-section__bleeding-options">
+                            @for (option of bleedingOptions; track option) {
+                              <label class="segment-option">
+                                <input
+                                  type="radio"
+                                  formControlName="parodontitisBleeding"
+                                  [value]="option"
+                                  [attr.name]="
+                                    'parodontitis-bleeding-' + declaration.currentPersonIndex()
+                                  "
+                                />
+                                <span>{{ option }}</span>
+                              </label>
+                            }
+                          </div>
+                        </div>
+
+                        <div class="parodontitis-section__instructions">
+                          <p>Es sind im Parodontalstatus einzutragen:</p>
+                          <ol>
+                            <li>Taschen von 4 mm und mehr Tiefe</li>
+                            <li>ZB = Zahnbeweglichkeit mit Grad 1, 2, 3 und 4</li>
+                          </ol>
+                        </div>
+
+                        <div class="parodontitis-section__chart">
+                          <div class="dental-finding__numbers">
+                            @for (label of dentalChartLabels; track $index) {
+                              <span>{{ label }}</span>
+                            }
+                          </div>
+
+                          <div class="dental-finding__grid dental-finding__grid--upper">
+                            @for (_label of dentalChartLabels; track $index) {
+                              <span class="dental-finding__cell"></span>
+                            }
+                          </div>
+
+                          <div class="parodontitis-section__image-shell">
+                            <img
+                              class="parodontitis-section__image"
+                              src="assets/Parodontitis.png"
+                              alt="Parodontalstatus"
+                            />
+                          </div>
+
+                          <div class="dental-finding__grid">
+                            @for (_label of dentalChartLabels; track $index) {
+                              <span class="dental-finding__cell"></span>
+                            }
+                          </div>
+
+                          <div class="dental-finding__numbers dental-finding__numbers--bottom">
+                            @for (label of dentalChartLabels; track $index) {
+                              <span>{{ label }}</span>
+                            }
+                          </div>
+                        </div>
+
+                        <div class="field parodontitis-section__remarks">
+                          <label for="parodontitisRemarks">Bemerkungen</label>
+                          <textarea
+                            class="diagnosis-entry__control diagnosis-entry__control--textarea"
+                            id="parodontitisRemarks"
+                            formControlName="parodontitisRemarks"
+                            placeholder="Hier eingeben..."
+                          ></textarea>
+                        </div>
+                      </div>
+                    }
+                  </article>
+                }
+              }
+
+              @if (questionControl(person, '17'); as question) {
+                @if (showQuestion(person, question)) {
+                  <article class="question-card" [formGroup]="asGroup(question)">
+                    <div class="question-card__header">
+                      <div>
+                        <h3>17. {{ text(question, 'prompt') }}</h3>
+                      </div>
+                    </div>
+                    <div class="diagnosis-entry__toggle">
+                      <label class="diagnosis-entry__toggle-option">
+                        <input
+                          type="radio"
+                          formControlName="answer"
+                          value="no"
+                          [attr.name]="questionInputId(question, 'answer')"
+                        />
+                        <span>Nein</span>
+                      </label>
+                      <label class="diagnosis-entry__toggle-option">
+                        <input
+                          type="radio"
+                          formControlName="answer"
+                          value="yes"
+                          [attr.name]="questionInputId(question, 'answer')"
+                        />
+                        <span>Ja</span>
+                      </label>
+                    </div>
+                    @if (shouldShowJawFields(person)) {
+                      <div class="field-grid" [formGroup]="dentalInfoGroup(person)">
+                        <div class="field" style="grid-column: span 12">
+                          <label for="jawDescription">Beschreibung</label>
+                          <textarea
+                            class="diagnosis-entry__control diagnosis-entry__control--textarea"
+                            id="jawDescription"
+                            formControlName="jawDescription"
+                            placeholder="Hier eingeben..."
+                          ></textarea>
+                        </div>
+                        <div class="field" style="grid-column: span 12">
+                          <label for="angleClass">Angle-Klasse</label>
+                          <input
+                            class="diagnosis-entry__control"
+                            id="angleClass"
+                            type="text"
+                            formControlName="angleClass"
+                            placeholder="Hier eingeben..."
+                          />
+                        </div>
+                        <div class="field" style="grid-column: span 12">
+                          <label class="fieldset-label"
+                            >Sind kieferorthopaedische Arbeiten zu erwarten?</label
+                          >
+                          <div class="diagnosis-entry__toggle">
+                            @for (option of yesNoChoiceOptions; track option.value) {
+                              <label class="diagnosis-entry__toggle-option">
+                                <input
+                                  type="radio"
+                                  formControlName="jawExpectedWork"
+                                  [value]="option.value"
+                                  [attr.name]="
+                                    'jaw-expected-work-' + declaration.currentPersonIndex()
+                                  "
+                                />
+                                <span>{{ option.label }}</span>
+                              </label>
+                            }
+                          </div>
+                        </div>
+                        @if (shouldShowJawWorkFields(person)) {
+                          <div class="field" style="grid-column: span 12">
+                            <label for="jawReason">Wenn ja, warum?</label>
+                            <textarea
+                              class="diagnosis-entry__control diagnosis-entry__control--textarea"
+                              id="jawReason"
+                              formControlName="jawReason"
+                              placeholder="Hier eingeben..."
+                            ></textarea>
+                          </div>
+                          <div class="field" style="grid-column: span 12">
+                            <label for="jawTreatments">Welche Behandlungen?</label>
+                            <textarea
+                              class="diagnosis-entry__control diagnosis-entry__control--textarea"
+                              id="jawTreatments"
+                              formControlName="jawTreatments"
+                              placeholder="Hier eingeben..."
+                            ></textarea>
+                          </div>
+                          <div class="field" style="grid-column: span 12">
+                            <label class="fieldset-label">Kostenschaetzung</label>
+                            <div class="estimate-picker">
+                              @for (option of jawCostOptions; track option) {
+                                <label class="segment-option estimate-picker__option">
+                                  <input
+                                    type="radio"
+                                    formControlName="jawCostEstimate"
+                                    [value]="option"
+                                    [attr.name]="'jaw-cost-' + declaration.currentPersonIndex()"
+                                  />
+                                  <span>{{ option }}</span>
+                                </label>
+                              }
+                            </div>
+                          </div>
+                        }
+                      </div>
+                    }
+                  </article>
+                }
+              }
+
+              <article class="question-card" [formGroup]="dentalInfoGroup(person)">
+                <div class="question-card__header">
+                  <div>
+                    <h3>18. Ergaenzende Fragen zum Zustand der Zaehne</h3>
+                  </div>
+                </div>
+                <div class="field-grid">
+                  <div class="field" style="grid-column: span 12">
+                    <label class="fieldset-label">18.1 Hygiene</label>
+                    <div class="three-option-toggle">
+                      @for (option of conditionOptions; track option) {
+                        <label class="three-option-toggle-option">
+                          <input
+                            type="radio"
+                            formControlName="hygiene"
+                            [value]="option"
+                            [attr.name]="'hygiene-' + declaration.currentPersonIndex()"
+                          />
+                          <span>{{ option }}</span>
+                        </label>
+                      }
+                    </div>
+                  </div>
+                </div>
+                @if (shouldShowHygieneReason(person)) {
+                  @if (questionControl(person, '18.1a'); as question) {
+                    <div class="field" [formGroup]="asGroup(question)">
+                      <label for="question-18-1a">18.1a {{ text(question, 'prompt') }}</label>
+                      <textarea
+                        class="diagnosis-entry__control diagnosis-entry__control--textarea"
+                        id="question-18-1a"
+                        formControlName="textValue"
+                        placeholder="Hier eingeben..."
+                      ></textarea>
+                    </div>
+                  }
+                }
+                @for (key of postMedicationQuestionKeys; track key) {
+                  @if (questionControl(person, key); as question) {
+                    @if (showQuestion(person, question)) {
+                      <div class="question-inline-block" [formGroup]="asGroup(question)">
+                        <label [for]="questionInputId(question)"
+                          >{{ key }} {{ text(question, 'prompt') }}</label
+                        >
+                        @if (questionType(question) === 'text') {
+                          <textarea
+                            class="diagnosis-entry__control diagnosis-entry__control--textarea"
+                            [id]="questionInputId(question)"
+                            formControlName="textValue"
+                            placeholder="Hier eingeben..."
+                          ></textarea>
+                        }
+                        @if (questionType(question) === 'date') {
+                          <input
+                            class="diagnosis-entry__control"
+                            [id]="questionInputId(question)"
+                            type="date"
+                            formControlName="dateValue"
+                          />
+                        }
+                        @if (questionType(question) === 'yes_no') {
+                          <div class="diagnosis-entry__toggle">
+                            <label class="diagnosis-entry__toggle-option">
+                              <input
+                                type="radio"
+                                formControlName="answer"
+                                value="no"
+                                [attr.name]="questionInputId(question, 'answer')"
+                              />
+                              <span>Nein</span>
+                            </label>
+                            <label class="diagnosis-entry__toggle-option">
+                              <input
+                                type="radio"
+                                formControlName="answer"
+                                value="yes"
+                                [attr.name]="questionInputId(question, 'answer')"
+                              />
+                              <span>Ja</span>
+                            </label>
+                          </div>
+                        }
+                      </div>
+                    }
+                  }
+                }
+                <div class="field" style="margin-top: 1rem">
+                  <label class="fieldset-label">18.12 Kostenschaetzung</label>
+                  <div class="estimate-picker">
+                    @for (option of dentaOptions; track option) {
+                      <label class="segment-option estimate-picker__option">
+                        <input
+                          type="radio"
+                          formControlName="plannedDentalCost"
+                          [value]="option"
+                          [attr.name]="'planned-dental-cost-' + declaration.currentPersonIndex()"
+                        />
+                        <span>{{ option }}</span>
+                      </label>
+                    }
+                  </div>
+                </div>
+              </article>
+            </section>
+          </section>
+        }
+      }
+    </section>
+  </div>
+
+  @if (!declaration.reviewMode()) {
+    <app-form-footer
+      [backDisabled]="false"
+      [nextDisabled]="!currentPersonValid()"
+      [nextLabel]="finishButtonLabel()"
+      [backRouterLink]="['/family']"
+      (next)="finalizeCurrentPerson()"
+    />
+  }
+</main>

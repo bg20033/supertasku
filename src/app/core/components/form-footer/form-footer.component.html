@@ -1,0 +1,39 @@
+<footer class="form-footer">
+  <div class="footer-content">
+    <div class="landing-tools">
+      <button
+        class="landing-tool"
+        type="button"
+        aria-label="Nachrichtenhilfe"
+        (click)="handleChat()"
+      >
+        <img src="assets/Icon-chat.svg" alt="" aria-hidden="true" />
+      </button>
+
+      <button class="landing-tool" type="button" aria-label="Sprachhilfe" (click)="handleVoice()">
+        <img src="assets/Icon-microphone.svg" alt="" aria-hidden="true" />
+      </button>
+    </div>
+
+    <div class="landing-actions">
+      <button
+        class="landing-action landing-action--back"
+        type="button"
+        [disabled]="backDisabled"
+        [routerLink]="backRouterLink"
+        (click)="handleBack()"
+      >
+        Back
+      </button>
+      <button
+        class="landing-action landing-action--next"
+        type="button"
+        [disabled]="nextDisabled"
+        [routerLink]="nextDisabled ? null : routerLink"
+        (click)="handleNext()"
+      >
+        {{ nextLabel }}
+      </button>
+    </div>
+  </div>
+</footer>

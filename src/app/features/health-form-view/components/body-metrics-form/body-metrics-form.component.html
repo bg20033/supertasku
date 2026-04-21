@@ -1,0 +1,60 @@
+<article class="question-card" [formGroup]="group()">
+  <div class="question-card__header">
+    <div>
+      <h3>3. Groesse und Gewicht</h3>
+      <p>Welches sind Ihre Koerpermasse?</p>
+    </div>
+  </div>
+
+  <div class="field-grid">
+    <div class="field" style="grid-column: span 6">
+      <label for="heightCm">Groesse</label>
+      <input
+        id="heightCm"
+        type="number"
+        min="50"
+        max="250"
+        step="1"
+        inputmode="numeric"
+        formControlName="heightCm"
+        placeholder="z. B. 177"
+      />
+      @if (
+        (group().get('heightCm')?.touched || group().get('heightCm')?.dirty) &&
+        !(group().get('heightCm')?.value | requiredValidation)
+      ) {
+        <span class="field-error">Die Groesse ist erforderlich.</span>
+      } @else if (
+        (group().get('heightCm')?.touched || group().get('heightCm')?.dirty) &&
+        !(group().get('heightCm')?.value | numericRangeValidation: 0 : 250)
+      ) {
+        <span class="field-error">Die Groesse muss zwischen 0 und 250 cm liegen.</span>
+      }
+    </div>
+
+    <div class="field" style="grid-column: span 6">
+      <label for="weightKg">Gewicht</label>
+      <input
+        id="weightKg"
+        type="number"
+        min="0"
+        max="200"
+        step="0.1"
+        inputmode="decimal"
+        formControlName="weightKg"
+        placeholder="z. B. 68"
+      />
+      @if (
+        (group().get('weightKg')?.touched || group().get('weightKg')?.dirty) &&
+        !(group().get('weightKg')?.value | requiredValidation)
+      ) {
+        <span class="field-error">Das Gewicht ist erforderlich.</span>
+      } @else if (
+        (group().get('weightKg')?.touched || group().get('weightKg')?.dirty) &&
+        !(group().get('weightKg')?.value | numericRangeValidation: 0 : 200)
+      ) {
+        <span class="field-error">Das Gewicht muss zwischen 0 und 200 kg liegen.</span>
+      }
+    </div>
+  </div>
+</article>

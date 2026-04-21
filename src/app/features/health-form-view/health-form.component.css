@@ -1,0 +1,817 @@
+.health-shell {
+  display: grid;
+  gap: 1rem;
+  min-height: 100vh;
+  align-content: start;
+}
+
+.wizard-header {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding: 1.35rem 1.35rem 0.9rem;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+}
+
+.wizard-body {
+  display: grid;
+  min-width: 0;
+}
+
+.wizard-panel {
+  display: grid;
+  gap: 1rem;
+  min-width: 0;
+  padding: 1.35rem;
+  border-radius: 2rem;
+  border: 1px solid rgba(214, 187, 255, 0.2);
+  background: linear-gradient(180deg, rgba(244, 237, 248, 0.98), rgba(241, 232, 247, 0.96));
+  box-shadow: 0 16px 36px rgba(36, 15, 62, 0.18);
+}
+
+.wizard-panel__header {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.wizard-panel__header h2 {
+  color: #1c1325;
+  font-size: 1.8rem;
+}
+
+.wizard-panel__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+}
+
+.section-tabs {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.section-tab {
+  display: grid;
+  gap: 0.2rem;
+  padding: 0.85rem;
+  border-radius: 1rem;
+  border: 1px solid rgba(193, 172, 222, 0.6);
+  background: rgba(235, 224, 246, 0.9);
+  color: #433253;
+  text-align: left;
+}
+
+.section-tab span {
+  color: #7a698a;
+  font-size: 0.85rem;
+}
+
+.section-tab.is-current {
+  border-color: #ab86e8;
+  background: linear-gradient(180deg, rgba(228, 211, 247, 0.98), rgba(223, 203, 243, 0.98));
+}
+
+.section-stack,
+.question-stack,
+.details-stack,
+.review-panel {
+  display: grid;
+  gap: 1.15rem;
+  min-width: 0;
+}
+
+.details-stack {
+  gap: 1.2rem;
+}
+
+.section-card,
+.question-card,
+.detail-card,
+.review-card {
+  display: grid;
+  gap: 1rem;
+  min-width: 0;
+  padding: 1rem;
+}
+
+.section-card__header,
+.question-card__header,
+.review-panel__header {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  min-width: 0;
+}
+
+.question-card__header > div,
+.section-card__header > div,
+.review-panel__header > div {
+  min-width: 0;
+}
+
+.section-card__header h3,
+.question-card__header h3,
+.review-panel__header h2,
+.review-card h3 {
+  color: #1d1426;
+}
+
+.question-card__header h3 {
+  font-size: 1.28rem;
+  line-height: 1.28;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.question-card__header p,
+.section-card__header p,
+.review-panel__header p,
+.info-card p,
+.summary-card p,
+.empty-state {
+  color: #7b6c88;
+}
+
+.review-cards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.review-card {
+  align-content: start;
+}
+
+.question-options-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.segment-option {
+  position: relative;
+  min-width: 0;
+}
+
+.segment-option input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.segment-option span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-width: 0;
+  min-height: var(--control-height);
+  height: var(--control-height);
+  padding: 0 0.75rem;
+  border: 1px solid #7d29de;
+  border-radius: 10px;
+  background: #e6d9f4;
+  color: #7b6f8d;
+  font-weight: 600;
+  text-align: center;
+  transition:
+    background-color 140ms ease,
+    border-color 140ms ease,
+    color 140ms ease,
+    box-shadow 140ms ease;
+}
+
+.segment-option input:checked + span {
+  background: #ffffff;
+  color: #17111e;
+  border-color: rgba(125, 41, 222, 0.22);
+  box-shadow: 0 1px 2px rgba(70, 24, 128, 0.12);
+}
+
+.question-inline-block {
+  display: grid;
+  gap: 0.45rem;
+  margin-top: 1rem;
+}
+
+.question-inline-block > label {
+  color: #776881;
+  font-weight: 500;
+}
+
+/* Form control styles for 18.x questions */
+.question-inline-block .diagnosis-entry__control {
+  width: 100% !important;
+  min-width: 0 !important;
+  min-height: var(--control-height) !important;
+  height: var(--control-height) !important;
+  padding: 0.45rem 0.75rem !important;
+  border-radius: 10px !important;
+  border: 1px solid #7d29de !important;
+  background: #e6d9f4 !important;
+  color: #16121d !important;
+  font-size: 0.98rem !important;
+  font-weight: 600 !important;
+  line-height: 1.25 !important;
+  outline: none !important;
+  transition:
+    border-color 140ms ease,
+    box-shadow 140ms ease,
+    transform 140ms ease !important;
+}
+
+.question-inline-block .diagnosis-entry__control:focus {
+  box-shadow: 0 0 0 4px rgba(135, 54, 244, 0.14) !important;
+}
+
+.question-inline-block .diagnosis-entry__control::placeholder {
+  color: #16121d !important;
+  opacity: 1 !important;
+}
+
+.question-inline-block .diagnosis-entry__control--textarea {
+  min-height: var(--control-height) !important;
+  height: var(--control-height) !important;
+  resize: none !important;
+  overflow: auto !important;
+}
+
+.lifestyle-substance-list {
+  display: grid;
+  gap: 1rem;
+}
+
+.lifestyle-substance {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.lifestyle-substance__row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.9rem;
+  align-items: start;
+  min-width: 0;
+  cursor: pointer;
+}
+
+.lifestyle-substance__label {
+  color: #1d1426;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.lifestyle-substance__checkbox {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 1.15rem;
+  height: 1.15rem;
+  margin: 0.15rem 0 0;
+  border: 2px solid #7d29de;
+  border-radius: 0.3rem;
+  background: #ffffff;
+  cursor: pointer;
+  transition:
+    background-color 140ms ease,
+    border-color 140ms ease,
+    box-shadow 140ms ease;
+}
+
+.lifestyle-substance__checkbox:checked {
+  background-color: #7d29de;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='white' d='M6.5 11.2 3.3 8l1.1-1.1 2.1 2.1 5-5L12.6 5z'/%3E%3C/svg%3E");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 0.78rem;
+}
+
+.lifestyle-substance__checkbox:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(149, 80, 255, 0.18);
+}
+
+.lifestyle-substance__details {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.lifestyle-substance__dates {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.lifestyle-substance__date-field {
+  display: grid;
+  gap: 0.35rem;
+  min-width: 0;
+}
+
+.lifestyle-substance__date-field > span {
+  color: #8d8299;
+  font-size: 0.92rem;
+  line-height: 1.2;
+}
+
+.lifestyle-substance__date-shell {
+  position: relative;
+  min-width: 0;
+}
+
+.lifestyle-substance__date-input {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: var(--control-height);
+  height: var(--control-height);
+  padding: 0.45rem 3rem 0.45rem 0.75rem;
+  border: 1px solid #7d29de;
+  border-radius: 10px;
+  background: #e6d9f4;
+  color: #3a2b46;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.lifestyle-substance__date-input:focus {
+  outline: none;
+  border-color: #b28ce5;
+  box-shadow: 0 0 0 3px rgba(178, 140, 229, 0.22);
+}
+
+.lifestyle-substance__date-input::-webkit-calendar-picker-indicator {
+  opacity: 0;
+}
+
+.lifestyle-substance__date-icon {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  width: 1.3rem;
+  height: 1.3rem;
+  transform: translateY(-50%);
+  color: #a18abc;
+  pointer-events: none;
+}
+
+.lifestyle-substance__date-icon svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  fill: currentColor;
+}
+
+.dental-finding {
+  display: grid;
+  gap: 1rem;
+}
+
+.dental-finding__notes textarea,
+.dental-finding__reason textarea {
+  min-height: 3rem;
+  resize: none;
+}
+
+.dental-finding__legend-block {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.dental-finding__legend-title {
+  color: #1d1426;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.dental-finding__legend-image {
+  display: block;
+  width: min(100%, 22rem);
+  height: auto;
+}
+
+.dental-finding__chart {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.dental-finding__numbers,
+.dental-finding__grid {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(16, minmax(0, 1fr));
+  min-width: 0;
+}
+
+.dental-finding__numbers::after,
+.dental-finding__grid::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  border-left: 2px dashed rgba(166, 106, 255, 0.52);
+  transform: translateX(-1px);
+  pointer-events: none;
+}
+
+.dental-finding__numbers span {
+  text-align: center;
+  color: #8a7b9c;
+  font-size: 0.8rem;
+  line-height: 1;
+}
+
+.dental-finding__grid {
+  border-radius: 0.7rem;
+  overflow: hidden;
+  border: 1px solid rgba(178, 140, 229, 0.55);
+  background: rgba(234, 222, 245, 0.7);
+}
+
+.dental-finding__grid--lower {
+  box-shadow: inset 0 0 0 1px rgba(95, 145, 255, 0.18);
+}
+
+.dental-finding__cell {
+  min-height: 1.85rem;
+  border-right: 1px solid rgba(178, 140, 229, 0.38);
+}
+
+.dental-finding__cell:last-child {
+  border-right: 0;
+}
+
+.dental-finding__image-shell {
+  display: grid;
+  place-items: center;
+  padding: 0.2rem 0;
+}
+
+.dental-finding__teeth-image {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.dental-finding__numbers--bottom {
+  margin-top: -0.15rem;
+}
+
+.dental-finding__date-input {
+  display: none;
+}
+
+.dental-finding__condition {
+  gap: 0.65rem;
+}
+
+.dental-finding__condition-options {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.parodontitis-section {
+  display: grid;
+  gap: 1rem;
+}
+
+.parodontitis-section__bleeding {
+  gap: 0.65rem;
+}
+
+.parodontitis-section__bleeding-options {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.parodontitis-section__instructions {
+  display: grid;
+  gap: 0.7rem;
+  color: #6f657a;
+  line-height: 1.35;
+}
+
+.parodontitis-section__instructions p {
+  color: #6f657a;
+  font-weight: 500;
+}
+
+.parodontitis-section__instructions ol {
+  margin: 0;
+  padding-left: 1.25rem;
+  display: grid;
+  gap: 0.6rem;
+}
+
+.parodontitis-section__chart {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.parodontitis-section__image-shell {
+  display: grid;
+  place-items: center;
+  padding: 0.15rem 0;
+}
+
+.parodontitis-section__image {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.parodontitis-section__remarks textarea {
+  min-height: 3rem;
+  resize: none;
+}
+
+.operation-flow {
+  display: grid;
+  gap: 1rem;
+}
+
+.operation-flow__implant-card {
+  display: grid;
+  gap: 0.85rem;
+  padding: 0.15rem 0 0;
+}
+
+.operation-flow__copy {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.operation-flow__title,
+.operation-flow__diagnosis-title {
+  color: #1d1426;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.operation-flow__hint {
+  color: #8b7f97;
+  font-size: 0.92rem;
+  line-height: 1.3;
+}
+
+.operation-flow__implant-details {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.operation-flow__status-options {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.operation-flow__diagnosis {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.estimate-picker {
+  display: grid;
+  gap: 0.35rem;
+  padding: 0.35rem;
+  border: 1px solid rgba(178, 140, 229, 0.55);
+  border-radius: 1.15rem;
+  background: rgba(230, 217, 244, 0.82);
+}
+
+.estimate-picker__option span {
+  border-color: transparent;
+  background: transparent;
+  color: #a996be;
+  box-shadow: none;
+  font-size: 14px;
+}
+
+.estimate-picker__option input:checked + span {
+  background: #ffffff;
+  height: var(--control-height);
+  color: #17111e;
+  border-color: rgba(125, 41, 222, 0.22);
+  box-shadow: 0 1px 2px rgba(70, 24, 128, 0.12);
+}
+
+.consent-box {
+  display: flex;
+  align-items: start;
+  gap: 0.8rem;
+  padding: 1rem;
+  border-radius: 1.1rem;
+  border: 1px solid rgba(206, 187, 232, 0.72);
+  background: rgba(236, 226, 246, 0.82);
+}
+
+.consent-box input {
+  margin-top: 0.15rem;
+}
+
+.wizard-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.wizard-panel .eyebrow,
+.wizard-panel .tag {
+  background: rgba(230, 216, 244, 0.85);
+  border-color: rgba(200, 179, 230, 0.75);
+  color: #675675;
+}
+
+.wizard-panel .field > label,
+.wizard-panel .fieldset-label {
+  color: #776881;
+  font-weight: 500;
+}
+
+.wizard-panel .field,
+.wizard-panel .field-grid > * {
+  min-width: 0;
+}
+
+.wizard-panel .field input,
+.wizard-panel .field select,
+.wizard-panel .field textarea {
+  box-sizing: border-box;
+  border-color: #7d29de;
+  border-radius: 10px;
+  background: #e6d9f4;
+  color: #3a2b46;
+  min-height: var(--control-height);
+  height: var(--control-height);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+.wizard-panel .field input::placeholder,
+.wizard-panel .field textarea::placeholder {
+  color: #a390b6;
+}
+
+.wizard-panel .field input:focus,
+.wizard-panel .field select:focus,
+.wizard-panel .field textarea:focus {
+  border-color: #b28ce5;
+  box-shadow: 0 0 0 3px rgba(178, 140, 229, 0.22);
+}
+
+.wizard-panel .field-error {
+  display: block;
+  min-height: 1.1rem;
+  color: #b05f90;
+  line-height: 1.2;
+}
+
+.diagnosis-add-button {
+  width: 100%;
+  height: var(--control-height);
+  border: 0;
+  border-radius: 8px;
+  background: linear-gradient(90deg, #6e27de 0%, #8f2ef6 100%);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    transform 140ms ease,
+    box-shadow 140ms ease;
+}
+
+.diagnosis-add-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 18px 28px rgba(111, 39, 222, 0.22);
+}
+
+@media (max-width: 1080px) {
+  .review-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .question-options-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .lifestyle-substance__dates {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .dental-finding__condition-options {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .parodontitis-section__bleeding-options {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .operation-flow__status-options {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 700px) {
+  .health-shell {
+    width: min(100%, 25rem);
+    margin: 0 auto;
+    gap: 0.9rem;
+  }
+
+  .wizard-header {
+    padding: 1rem 0.95rem 0.5rem;
+  }
+
+  .wizard-panel {
+    padding: 0.95rem 0.9rem 1.25rem;
+    border-radius: 1.7rem;
+  }
+
+  .wizard-panel__header,
+  .divider-line {
+    display: none;
+  }
+
+  .question-stack,
+  .section-stack,
+  .details-stack {
+    gap: 1.25rem;
+  }
+
+  .section-card,
+  .question-card,
+  .detail-card,
+  .review-card {
+    gap: 0.85rem;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+  }
+  
+
+  .question-card__header {
+    gap: 0.55rem;
+  }
+
+  .question-card__header h3 {
+    font-size: 14px;
+    line-height: 1.32;
+  }
+
+  .question-card__header p {
+    font-size: 0.88rem;
+    line-height: 1.35;
+  }
+
+  .wizard-panel .field-grid {
+    gap: 0.85rem;
+  }
+
+  .wizard-panel .field textarea {
+    min-height: 3.8rem;
+  }
+
+  .dental-finding {
+    gap: 0.85rem;
+  }
+
+  .dental-finding__legend-block {
+    gap: 0.65rem;
+  }
+
+  .dental-finding__legend-title {
+    font-size: 0.95rem;
+  }
+
+  .dental-finding__legend-image,
+  .dental-finding__teeth-image {
+    width: 100%;
+    max-width: none;
+  }
+
+  .parodontitis-section__image {
+    width: 100%;
+    max-width: none;
+  }
+
+  .dental-finding__numbers span {
+    font-size: 0.76rem;
+  }
+
+  .dental-finding__cell {
+    min-height: 1.75rem;
+  }
+
+  .wizard-actions,
+  .button-row {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+}

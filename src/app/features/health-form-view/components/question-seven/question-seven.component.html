@@ -1,0 +1,151 @@
+<article class="question-card operation-question" [formGroup]="operationQuestion()">
+  <div class="question-card__header">
+    <div>
+      <h3>{{ title() }}</h3>
+    </div>
+  </div>
+
+  <div class="diagnosis-entry__toggle">
+    <label class="diagnosis-entry__toggle-option">
+      <input
+        type="radio"
+        formControlName="answer"
+        value="no"
+        [attr.name]="questionInputId('answer')"
+      />
+      <span>Nein</span>
+    </label>
+
+    <label class="diagnosis-entry__toggle-option">
+      <input
+        type="radio"
+        formControlName="answer"
+        value="yes"
+        [attr.name]="questionInputId('answer')"
+      />
+      <span>Ja</span>
+    </label>
+  </div>
+
+  @if (
+    (operationQuestion().get('answer')?.touched || operationQuestion().get('answer')?.dirty) &&
+    !(operationQuestion().get('answer')?.value | requiredValidation)
+  ) {
+    <span class="field-error">Bitte beantworten Sie diese Frage.</span>
+  }
+
+  @if (showOperationFollowup()) {
+    <div class="operation-flow">
+      <div class="details-stack" formArrayName="details">
+        @for (detail of details().controls; track $index) {
+          <section class="operation-flow__entry" [formGroup]="asGroup(detail)">
+            <div class="operation-flow__entry-header">
+              <div class="operation-flow__copy">
+                <p class="operation-flow__title">
+                  Wenn ja, wurde Ihnen ein Implantat oder ein Fremdkoerper eingesetzt?
+                </p>
+                <p class="operation-flow__hint">
+                  (Platten, Schrauben, Prothesen, Brustimplantate, Gelenkersatz, Magenband, Stent
+                  etc.)
+                </p>
+              </div>
+
+              @if (details().length > 1) {
+                <button
+                  class="operation-flow__remove"
+                  type="button"
+                  (click)="requestRemove($index)"
+                >
+                  Entfernen
+                </button>
+              }
+            </div>
+
+            <div class="diagnosis-entry__toggle">
+              <label class="diagnosis-entry__toggle-option">
+                <input
+                  type="radio"
+                  formControlName="implantAnswer"
+                  value="no"
+                  [attr.name]="implantToggleName($index)"
+                  (change)="updateImplantAnswer(detail, 'no')"
+                />
+                <span>Nein</span>
+              </label>
+
+              <label class="diagnosis-entry__toggle-option">
+                <input
+                  type="radio"
+                  formControlName="implantAnswer"
+                  value="yes"
+                  [attr.name]="implantToggleName($index)"
+                  (change)="updateImplantAnswer(detail, 'yes')"
+                />
+                <span>Ja</span>
+              </label>
+            </div>
+
+            @if (
+              (detail.get('implantAnswer')?.touched || detail.get('implantAnswer')?.dirty) &&
+              !(detail.get('implantAnswer')?.value | requiredValidation)
+            ) {
+              <span class="field-error">Bitte beantworten Sie diese Frage.</span>
+            }
+
+            @if (showImplantDetails(detail)) {
+              <div class="operation-flow__implant-details">
+                <div class="field">
+                  <label [for]="detailInputId($index, 'implant-details')">Was und wo?</label>
+                  <input
+                    [id]="detailInputId($index, 'implant-details')"
+                    type="text"
+                    formControlName="implantDetails"
+                    placeholder="Hier eingeben..."
+                  />
+                </div>
+
+                <div class="question-options-grid operation-flow__status-options">
+                  @for (option of implantStatusOptions; track option.value) {
+                    <label class="segment-option">
+                      <input
+                        type="radio"
+                        formControlName="implantStatus"
+                        [value]="option.value"
+                        [attr.name]="detailInputId($index, 'implant-status')"
+                      />
+                      <span>{{ option.label }}</span>
+                    </label>
+                  }
+                </div>
+              </div>
+            }
+
+            <div class="operation-flow__diagnosis">
+              <p class="operation-flow__diagnosis-title">
+                1) Bitte geben Sie alle zu dieser Frage relevanten Diagnosen an:
+              </p>
+
+              <app-diagnosis-entry
+                [group]="asGroup(detail)"
+                [index]="$index"
+                [entryKey]="diagnosisEntryKey($index)"
+                [canRemove]="false"
+                [showHeader]="false"
+              />
+            </div>
+          </section>
+        }
+
+        @if (
+          (details().touched || details().dirty) && !(details().controls | minItemsValidation: 1)
+        ) {
+          <span class="field-error">Bitte mindestens einen Diagnose-Eintrag erfassen.</span>
+        }
+
+        <button class="diagnosis-add-button" type="button" (click)="requestAdd()">
+          + Weitere Diagnose
+        </button>
+      </div>
+    </div>
+  }
+</article>
