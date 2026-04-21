@@ -19,17 +19,6 @@
         formControlName="heightCm"
         placeholder="z. B. 177"
       />
-      @if (
-        (group().get('heightCm')?.touched || group().get('heightCm')?.dirty) &&
-        !(group().get('heightCm')?.value | requiredValidation)
-      ) {
-        <span class="field-error">Die Groesse ist erforderlich.</span>
-      } @else if (
-        (group().get('heightCm')?.touched || group().get('heightCm')?.dirty) &&
-        !(group().get('heightCm')?.value | numericRangeValidation: 0 : 250)
-      ) {
-        <span class="field-error">Die Groesse muss zwischen 0 und 250 cm liegen.</span>
-      }
     </div>
 
     <div class="field" style="grid-column: span 6">
@@ -44,6 +33,19 @@
         formControlName="weightKg"
         placeholder="z. B. 68"
       />
+    </div>
+    <div class="field-error-container" style="grid-column: span 12">
+      @if (
+        (group().get('heightCm')?.touched || group().get('heightCm')?.dirty) &&
+        !(group().get('heightCm')?.value | requiredValidation)
+      ) {
+        <span class="field-error">Die Groesse ist erforderlich.</span>
+      } @else if (
+        (group().get('heightCm')?.touched || group().get('heightCm')?.dirty) &&
+        !(group().get('heightCm')?.value | numericRangeValidation: 40 : 250)
+      ) {
+        <span class="field-error">Die Groesse muss zwischen 40 und 250 cm liegen.</span>
+      }
       @if (
         (group().get('weightKg')?.touched || group().get('weightKg')?.dirty) &&
         !(group().get('weightKg')?.value | requiredValidation)
@@ -51,9 +53,9 @@
         <span class="field-error">Das Gewicht ist erforderlich.</span>
       } @else if (
         (group().get('weightKg')?.touched || group().get('weightKg')?.dirty) &&
-        !(group().get('weightKg')?.value | numericRangeValidation: 0 : 200)
+        !(group().get('weightKg')?.value | numericRangeValidation: 1 : 200)
       ) {
-        <span class="field-error">Das Gewicht muss zwischen 0 und 200 kg liegen.</span>
+        <span class="field-error flex">Das Gewicht muss zwischen 1 und 200 kg liegen.</span>
       }
     </div>
   </div>

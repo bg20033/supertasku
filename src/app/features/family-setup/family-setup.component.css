@@ -65,8 +65,6 @@
   font-size: 0.92rem;
 }
 
-
-
 .family-members {
   display: grid;
   max-height: 300px;
@@ -142,9 +140,8 @@
   border: 0;
   border-radius: 0.6rem;
   cursor: pointer;
-  transition:
-    transform 140ms ease,
-    /* box-shadow 140ms ease; */
+  transition: transform 140ms ease;
+  /* box-shadow 140ms ease; */
 }
 
 .family-member__action svg {
@@ -166,6 +163,27 @@
 .family-member__action--delete {
   background: #ffd8dd;
   color: #ff2949;
+}
+
+.family-member__action--short {
+  width: 1.4rem;
+  height: 1.4rem;
+}
+
+.family-member__action--short svg {
+  width: 0.8rem;
+  height: 0.8rem;
+}
+
+.family-member__year-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.family-member__year-shell {
+  flex: 1;
+  min-width: 0;
 }
 
 .family-member__editor {
@@ -409,7 +427,7 @@
   margin: 0;
   padding: 0;
   z-index: 1000000 !important;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .location-option {
@@ -445,7 +463,9 @@
   color: #16111d;
   font-size: 1rem;
   font-weight: 500;
-  transition: border-color 140ms ease, box-shadow 140ms ease;
+  transition:
+    border-color 140ms ease,
+    box-shadow 140ms ease;
 }
 
 .location-input input:focus {

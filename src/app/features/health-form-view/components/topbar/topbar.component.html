@@ -2,7 +2,9 @@
   <div class="grid grid-cols-[2.25rem_minmax(0,1fr)_2.25rem] items-center gap-3">
     <span aria-hidden="true"></span>
 
-    <h1 class="text-center text-[clamp(1.65rem,4vw,2.5rem)] font-normal tracking-[-0.03em] text-white">
+    <h1
+      class="text-center text-[clamp(1.65rem,4vw,2.5rem)] font-normal tracking-[-0.03em] text-white"
+    >
       Gesundheitsdeklaration
     </h1>
 
@@ -27,30 +29,30 @@
             [ngClass]="{
               ' ': tab.state === 'active',
               'opacity-45 grayscale cursor-not-allowed': !tab.canOpen,
-              'cursor-pointer hover:-translate-y-0.5': tab.canOpen && tab.state !== 'active'
+              'cursor-pointer hover:-translate-y-0.5': tab.canOpen && tab.state !== 'active',
             }"
             (click)="visitPerson(tab.index)"
           >
             @if (tab.completed) {
-              <span class="absolute right-1.5 top-1 inline-flex h-5 w-5 items-center justify-center rounded-full bg-emerald-500 text-white shadow-sm">
-                <mat-icon class="h-4! w-4! mb-2! text-base!">check</mat-icon>
+              <span class="text-[0.8rem] leading-none text-green-500">
+                <mat-icon class="h-6! w-6! text-base! scale-165">check</mat-icon>
+              </span>
+            } @else {
+              <span
+                class="text-[0.8rem] leading-none"
+                [ngClass]="{
+                  'font-semibold text-slate-950': tab.state === 'active',
+                  'font-medium text-slate-500': tab.state !== 'active' && tab.canOpen,
+                  'font-medium text-slate-400': !tab.canOpen,
+                }"
+              >
+                {{ tab.label }}
               </span>
             }
 
             <span
-              class="text-[0.8rem] leading-none"
-              [ngClass]="{
-                'font-semibold text-slate-950': tab.state === 'active',
-                'font-medium text-slate-500': tab.state !== 'active' && tab.canOpen,
-                'font-medium text-slate-400': !tab.canOpen
-              }"
-            >
-              {{ tab.label }}
-            </span>
-
-            <span
               class="flex h-[3.85rem] w-[3.85rem] items-end justify-center overflow-hidden rounded-[1.1rem] transition-transform duration-200"
-              [class.scale-105]="tab.state === 'active'"
+              [class.scale-100]="tab.state === 'active'"
               [class.opacity-95]="tab.canOpen"
             >
               <img

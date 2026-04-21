@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { AbstractControl, FormArray, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -96,6 +96,12 @@ export class HealthFormViewView {
     { value: 'yes' as const, label: 'Ja' },
   ] as const;
   protected readonly bleedingOptions = ['Ja', 'Nein', 'Teilweise', 'Ueberall'] as const;
+
+  // Selected dental cells
+  protected readonly selectedDentalCellsUpper = signal(new Array(16).fill(false));
+  protected readonly selectedDentalCellsLower = signal(new Array(16).fill(false));
+  protected readonly selectedParodontitisCellsUpper = signal(new Array(16).fill(false));
+  protected readonly selectedParodontitisCellsLower = signal(new Array(16).fill(false));
   protected readonly lifestyleSubstances: LifestyleSubstance[] = [
     {
       key: 'nicotine',
@@ -331,5 +337,37 @@ export class HealthFormViewView {
 
   protected lifestyleInputId(field: string): string {
     return `lifestyle-${this.declaration.currentPersonIndex()}-${field}`;
+  }
+
+  protected onDentalCellClick(index: number, isUpper: boolean, isParodontitis: boolean): void {
+    if (isParodontitis) {
+      if (isUpper) {
+        this.selectedParodontitisCellsUpper.update((arr) => {
+          arr[index] = !arr[index];
+          console.log(`Parodontitis upper cell ${index}: ${arr[index]}`);
+          return [...arr];
+        });
+      } else {
+        this.selectedParodontitisCellsLower.update((arr) => {
+          arr[index] = !arr[index];
+          console.log(`Parodontitis lower cell ${index}: ${arr[index]}`);
+          return [...arr];
+        });
+      }
+    } else {
+      if (isUpper) {
+        this.selectedDentalCellsUpper.update((arr) => {
+          arr[index] = !arr[index];
+          console.log(`Dental upper cell ${index}: ${arr[index]}`);
+          return [...arr];
+        });
+      } else {
+        this.selectedDentalCellsLower.update((arr) => {
+          arr[index] = !arr[index];
+          console.log(`Dental lower cell ${index}: ${arr[index]}`);
+          return [...arr];
+        });
+      }
+    }
   }
 }

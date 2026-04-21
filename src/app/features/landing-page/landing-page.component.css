@@ -2,7 +2,7 @@
   min-height: 100dvh;
   display: flex;
   justify-content: center;
-  padding: 3rem;
+  padding: 2rem;
 }
 
 .landing-frame::before {
@@ -35,8 +35,8 @@
   text-align: center;
   margin-left: 2.15rem;
   color: #ffffff;
-  font-size: clamp(1.55rem, 4vw, 1.95rem);
-  font-weight: 500;
+  font-size: 24px;
+  font-weight: 400;
   letter-spacing: -0.03em;
 }
 
@@ -67,7 +67,7 @@
 .landing-avatar {
   position: absolute;
   left: 50%;
-  top: 0;
+  top: -8%;
   width: 210px;
   height: 210px;
   transform: translate(-50%, -10%);
@@ -109,7 +109,7 @@
   }
 
   .landing-header h1 {
-    font-size: 1.55rem;
+    font-size: 24px;
   }
 
 .landing-header {
@@ -118,7 +118,7 @@
   justify-content: space-between;
   gap: 1rem;
   padding-inline: 0.15rem;
-  padding-top: 3rem;
-  padding-bottom: 2rem;
+  padding-top: 2rem;
+  padding-bottom: 3rem;
 }
 }

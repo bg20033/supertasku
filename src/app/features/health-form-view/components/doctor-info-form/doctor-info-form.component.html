@@ -28,12 +28,6 @@
     <div class="field" style="grid-column: span 6">
       <label for="doctorFamilyName">Name</label>
       <input id="doctorFamilyName" type="text" formControlName="familyName" placeholder="Name" />
-      @if (
-        (group().get('familyName')?.touched || group().get('familyName')?.dirty) &&
-        !(group().get('familyName')?.value | requiredValidation)
-      ) {
-        <span class="field-error">Der Name ist erforderlich.</span>
-      }
     </div>
 
     <div class="field" style="grid-column: span 6">
@@ -44,17 +38,32 @@
         formControlName="givenNames"
         placeholder="Vornamen"
       />
+    </div>
+    <div class="field-error-container" style="grid-column: span 12">
+      @if (
+        (group().get('familyName')?.touched || group().get('familyName')?.dirty) &&
+        !(group().get('familyName')?.value | requiredValidation)
+      ) {
+        <span class="field-error">Der Name ist erforderlich.</span>
+      }
       @if (
         (group().get('givenNames')?.touched || group().get('givenNames')?.dirty) &&
         !(group().get('givenNames')?.value | requiredValidation)
       ) {
-        <span class="field-error">Die Vornamen sind erforderlich.</span>
+        <span class="field-error flex">Die Vornamen sind erforderlich.</span>
       }
     </div>
 
     <div class="field" style="grid-column: span 7">
       <label for="doctorStreet">Strasse</label>
       <input id="doctorStreet" type="text" formControlName="street" placeholder="Strasse" />
+    </div>
+
+    <div class="field" style="grid-column: span 5">
+      <label for="doctorStreetNumber">Nr.</label>
+      <input id="doctorStreetNumber" type="text" formControlName="streetNumber" placeholder="Nr." />
+    </div>
+    <div class="field-error-container" style="grid-column: span 12">
       @if (
         (group().get('street')?.touched || group().get('street')?.dirty) &&
         !(group().get('street')?.value | requiredValidation)
@@ -63,37 +72,30 @@
       }
     </div>
 
-    <div class="field" style="grid-column: span 5">
-      <label for="doctorStreetNumber">Nr.</label>
-      <input id="doctorStreetNumber" type="text" formControlName="streetNumber" placeholder="Nr." />
-      @if (
-        (group().get('streetNumber')?.touched || group().get('streetNumber')?.dirty) &&
-        !(group().get('streetNumber')?.value | requiredValidation)
-      ) {
-        <span class="field-error">Die Hausnummer ist erforderlich.</span>
-      }
-    </div>
-
     <div class="field" style="grid-column: span 4">
       <label for="doctorPostalCode">PLZ</label>
       <input id="doctorPostalCode" type="number" formControlName="postalCode" placeholder="PLZ" />
-      @if (
-        (group().get('postalCode')?.touched || group().get('postalCode')?.dirty) &&
-        !(group().get('postalCode')?.value | requiredValidation)
-      ) {
-        <span class="field-error">Die PLZ ist erforderlich.</span>
-      }
     </div>
 
     <div class="field" style="grid-column: span 8">
       <label for="doctorCity">Ort</label>
       <input id="doctorCity" type="text" formControlName="city" placeholder="Ort" />
+    </div>
+
+    <div class="field-error-container" style="grid-column: span 12">
+      @if (
+        (group().get('streetNumber')?.touched || group().get('streetNumber')?.dirty) &&
+        !(group().get('streetNumber')?.value | requiredValidation)
+      ) {
+        <span class="field-error flex">Die Hausnummer ist erforderlich.</span>
+      }
       @if (
         (group().get('city')?.touched || group().get('city')?.dirty) &&
         !(group().get('city')?.value | requiredValidation)
       ) {
-        <span class="field-error">Der Ort ist erforderlich.</span>
+        <span class="field-error flex">Der Ort ist erforderlich.</span>
       }
     </div>
+    
   </div>
 </article>

@@ -449,6 +449,10 @@
   border-right: 0;
 }
 
+.dental-finding__cell.selected {
+  background-color: #7d29de;
+}
+
 .dental-finding__image-shell {
   display: grid;
   place-items: center;
@@ -754,7 +758,6 @@
     border-radius: 0;
     background: transparent;
   }
-  
 
   .question-card__header {
     gap: 0.55rem;

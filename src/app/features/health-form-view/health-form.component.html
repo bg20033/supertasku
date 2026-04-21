@@ -331,7 +331,11 @@
                     </div>
                     <div class="dental-finding__grid dental-finding__grid--upper">
                       @for (_label of dentalChartLabels; track $index) {
-                        <span class="dental-finding__cell"></span>
+                        <span
+                          class="dental-finding__cell"
+                          [class.selected]="selectedDentalCellsUpper()[$index]"
+                          (click)="onDentalCellClick($index, true, false)"
+                        ></span>
                       }
                     </div>
 
@@ -345,7 +349,11 @@
 
                     <div class="dental-finding__grid dental-finding__grid--lower">
                       @for (_label of dentalChartLabels; track $index) {
-                        <span class="dental-finding__cell"></span>
+                        <span
+                          class="dental-finding__cell"
+                          [class.selected]="selectedDentalCellsLower()[$index]"
+                          (click)="onDentalCellClick($index, false, false)"
+                        ></span>
                       }
                     </div>
 
@@ -462,7 +470,11 @@
 
                           <div class="dental-finding__grid dental-finding__grid--upper">
                             @for (_label of dentalChartLabels; track $index) {
-                              <span class="dental-finding__cell"></span>
+                              <span
+                                class="dental-finding__cell"
+                                [class.selected]="selectedParodontitisCellsUpper()[$index]"
+                                (click)="onDentalCellClick($index, true, true)"
+                              ></span>
                             }
                           </div>
 
@@ -476,7 +488,11 @@
 
                           <div class="dental-finding__grid">
                             @for (_label of dentalChartLabels; track $index) {
-                              <span class="dental-finding__cell"></span>
+                              <span
+                                class="dental-finding__cell"
+                                [class.selected]="selectedParodontitisCellsLower()[$index]"
+                                (click)="onDentalCellClick($index, false, true)"
+                              ></span>
                             }
                           </div>
 
