@@ -77,6 +77,7 @@
                       formControlName="gender"
                       [value]="option.value"
                       [attr.name]="'gender-' + $index"
+                      (change)="onGenderChange(person, $index)"
                     />
                     @if (option.value === 'baby') {
                       <span class="max-w-10">
@@ -123,7 +124,7 @@
                   </div>
                   @if ($index > 0) {
                     <button
-                      class="family-member__action family-member__action--delete "
+                      class="family-member__action family-member__action--delete"
                       type="button"
                       (click)="removePerson($index)"
                       aria-label="Person entfernen"

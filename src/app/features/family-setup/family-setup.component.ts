@@ -174,6 +174,14 @@ export class FamilySetupView {
     this.editingPersonIndex.set(null);
   }
 
+  protected onGenderChange(person: AbstractControl, index: number): void {
+    const gender = this.profileGroup(person).get('gender')?.value;
+    if (gender === 'baby') {
+      const currentYear = new Date().getFullYear();
+      this.profileGroup(person).get('birthDate')?.setValue(currentYear.toString());
+    }
+  }
+
   protected isPersonComplete(person: AbstractControl): boolean {
     return this.profileGroup(person).valid;
   }
