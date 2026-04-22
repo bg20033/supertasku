@@ -54,7 +54,8 @@ textarea {
 
 input::placeholder,
 textarea::placeholder {
-  color: rgba(72, 46, 109, 0.6);
+  color: #a893bd;
+  font-weight: 400;
 }
 
 a {
@@ -183,6 +184,7 @@ p {
   width: 100%;
   border-radius: 10px;
   border: 1px solid #7d29de;
+  line-height: 1.6;
   background: #e6d9f4;
   height: var(--control-height);
   min-height: var(--control-height);
@@ -338,7 +340,7 @@ textarea:not(.diagnosis-entry__control--textarea)::-webkit-resizer {
   border-radius: 8px;
   background: transparent;
   color: #ab9ac1;
-  font-weight: 400;
+  font-weight: 500;
   transition:
     background-color 140ms ease,
     color 140ms ease,
@@ -404,6 +406,7 @@ textarea:not(.diagnosis-entry__control--textarea)::-webkit-resizer {
   background: #ffffff;
   color: #17111e;
   border-color: rgba(125, 41, 222, 0.22);
+  font-weight: 500;
   box-shadow: 0 1px 2px rgba(70, 24, 128, 0.12);
 }
 
@@ -425,6 +428,7 @@ textarea:not(.diagnosis-entry__control--textarea)::-webkit-resizer {
   flex: 1 1 auto;
   min-width: 0;
   height: 100%;
+  font-weight: 400;
   min-height: 0;
   padding: 0 0.75rem;
   cursor: pointer;

@@ -121,7 +121,8 @@
 }
 
 .diagnosis-entry__control::placeholder {
-  color: #16121d;
+  color: #a893bd;
+  font-weight: 400;
   opacity: 1;
 }
 

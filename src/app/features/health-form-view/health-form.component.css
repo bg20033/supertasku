@@ -191,7 +191,7 @@
   border-radius: 10px;
   background: #e6d9f4;
   color: #7b6f8d;
-  font-weight: 600;
+  font-weight: 500;
   text-align: center;
   transition:
     background-color 140ms ease,
@@ -244,7 +244,8 @@
 }
 
 .question-inline-block .diagnosis-entry__control::placeholder {
-  color: #16121d !important;
+  color: #a893bd !important;
+  font-weight: 400 !important;
   opacity: 1 !important;
 }
 
@@ -452,6 +453,7 @@
 }
 
 .dental-finding__cell {
+  position: relative;
   min-height: 1.85rem;
   border-right: 1px solid rgba(178, 140, 229, 0.38);
 }
@@ -462,6 +464,19 @@
 
 .dental-finding__cell.selected {
   background-color: #7d29de;
+}
+
+.dental-finding__cell.selected::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 0.38rem;
+  height: 0.78rem;
+  border-right: 2px solid #fff;
+  border-bottom: 2px solid #fff;
+  transform: translate(-50%, -60%) rotate(45deg);
+  pointer-events: none;
 }
 
 .dental-finding__image-shell {
@@ -669,7 +684,8 @@
 
 .wizard-panel .field input::placeholder,
 .wizard-panel .field textarea::placeholder {
-  color: #a390b6;
+  color: #a893bd;
+  font-weight: 400;
 }
 
 .wizard-panel .field input:focus,

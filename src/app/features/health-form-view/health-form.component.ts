@@ -1,8 +1,10 @@
+import { ViewportScroller } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { AbstractControl, FormArray, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { startWith } from 'rxjs';
+import { NoScientificNotationDirective } from '../../core/directives/no-scientific-notation.directive';
 import { HealthDeclarationFormService } from '../../core/services/health-declaration-form.service';
 import { FormFooterComponent } from '../../core/components/form-footer/form-footer.component';
 import { NumericRangeValidationPipe, RequiredValidationPipe } from '../../core/pipes';
@@ -15,6 +17,12 @@ import { StandardQuestionCard } from './components/standard-question-card/standa
 import { Topbar } from './components/topbar/topbar.component';
 
 type QuestionType = 'yes_no' | 'yes_no_with_details' | 'text' | 'date';
+type DentalSelectionState = {
+  dentalUpper: boolean[];
+  dentalLower: boolean[];
+  parodontitisUpper: boolean[];
+  parodontitisLower: boolean[];
+};
 type LifestyleSubstance = {
   key: 'nicotine' | 'alcohol' | 'drug';
   label: string;
@@ -32,6 +40,7 @@ type LifestyleSubstance = {
     FormFooterComponent,
     BodyMetricsForm,
     DoctorInfoForm,
+    NoScientificNotationDirective,
     NumericRangeValidationPipe,
     RequiredValidationPipe,
     QuestionSeven,
@@ -47,6 +56,7 @@ type LifestyleSubstance = {
 export class HealthFormViewView {
   protected readonly declaration = inject(HealthDeclarationFormService);
   private readonly router = inject(Router);
+  private readonly viewportScroller = inject(ViewportScroller);
   private readonly formSnapshot = toSignal(
     this.declaration.form.valueChanges.pipe(startWith(this.declaration.form.getRawValue())),
     { initialValue: this.declaration.form.getRawValue() },
@@ -96,12 +106,35 @@ export class HealthFormViewView {
     { value: 'yes' as const, label: 'Ja' },
   ] as const;
   protected readonly bleedingOptions = ['Ja', 'Nein', 'Teilweise', 'Ueberall'] as const;
-
-  // Selected dental cells
-  protected readonly selectedDentalCellsUpper = signal(new Array(16).fill(false));
-  protected readonly selectedDentalCellsLower = signal(new Array(16).fill(false));
-  protected readonly selectedParodontitisCellsUpper = signal(new Array(16).fill(false));
-  protected readonly selectedParodontitisCellsLower = signal(new Array(16).fill(false));
+  private readonly emptyDentalSelectionState: DentalSelectionState = {
+    dentalUpper: Array(16).fill(false),
+    dentalLower: Array(16).fill(false),
+    parodontitisUpper: Array(16).fill(false),
+    parodontitisLower: Array(16).fill(false),
+  };
+  private readonly personDentalSelections = signal<Record<string, DentalSelectionState>>({});
+  private readonly currentPersonDentalSelectionKey = computed(() => {
+    const personIndex = this.declaration.currentPersonIndex();
+    const person = this.declaration.personAt(personIndex);
+    return person ? this.declaration.personId(person) || `person-${personIndex}` : `person-${personIndex}`;
+  });
+  private readonly currentDentalSelectionState = computed(
+    () =>
+      this.personDentalSelections()[this.currentPersonDentalSelectionKey()] ??
+      this.emptyDentalSelectionState,
+  );
+  protected readonly selectedDentalCellsUpper = computed(
+    () => this.currentDentalSelectionState().dentalUpper,
+  );
+  protected readonly selectedDentalCellsLower = computed(
+    () => this.currentDentalSelectionState().dentalLower,
+  );
+  protected readonly selectedParodontitisCellsUpper = computed(
+    () => this.currentDentalSelectionState().parodontitisUpper,
+  );
+  protected readonly selectedParodontitisCellsLower = computed(
+    () => this.currentDentalSelectionState().parodontitisLower,
+  );
   protected readonly lifestyleSubstances: LifestyleSubstance[] = [
     {
       key: 'nicotine',
@@ -219,7 +252,13 @@ export class HealthFormViewView {
   }
 
   protected finalizeCurrentPerson(): void {
-    this.declaration.finalizeCurrentPerson();
+    const result = this.declaration.finalizeCurrentPerson();
+
+    if (result === 'advanced') {
+      requestAnimationFrame(() => {
+        this.viewportScroller.scrollToPosition([0, 0]);
+      });
+    }
   }
 
   protected questionControl(person: AbstractControl, key: string): FormGroup | null {
@@ -339,35 +378,60 @@ export class HealthFormViewView {
     return `lifestyle-${this.declaration.currentPersonIndex()}-${field}`;
   }
 
+  private createEmptyDentalRow(): boolean[] {
+    return Array(16).fill(false);
+  }
+
+  private createEmptyDentalSelectionState(): DentalSelectionState {
+    return {
+      dentalUpper: this.createEmptyDentalRow(),
+      dentalLower: this.createEmptyDentalRow(),
+      parodontitisUpper: this.createEmptyDentalRow(),
+      parodontitisLower: this.createEmptyDentalRow(),
+    };
+  }
+
+  private selectedCellIndexes(values: boolean[]): number[] {
+    return values.flatMap((isSelected, index) => (isSelected ? [index + 1] : []));
+  }
+
+  private logDentalSelection(personIndex: number, personKey: string, state: DentalSelectionState): void {
+    console.log(`[DentalFinding] Person ${personIndex + 1} (${personKey}) selection updated`);
+    console.log({
+      dentalUpper: this.selectedCellIndexes(state.dentalUpper),
+      dentalLower: this.selectedCellIndexes(state.dentalLower),
+      parodontitisUpper: this.selectedCellIndexes(state.parodontitisUpper),
+      parodontitisLower: this.selectedCellIndexes(state.parodontitisLower),
+    });
+  }
+
   protected onDentalCellClick(index: number, isUpper: boolean, isParodontitis: boolean): void {
-    if (isParodontitis) {
-      if (isUpper) {
-        this.selectedParodontitisCellsUpper.update((arr) => {
-          arr[index] = !arr[index];
-          console.log(`Parodontitis upper cell ${index}: ${arr[index]}`);
-          return [...arr];
-        });
-      } else {
-        this.selectedParodontitisCellsLower.update((arr) => {
-          arr[index] = !arr[index];
-          console.log(`Parodontitis lower cell ${index}: ${arr[index]}`);
-          return [...arr];
-        });
-      }
-    } else {
-      if (isUpper) {
-        this.selectedDentalCellsUpper.update((arr) => {
-          arr[index] = !arr[index];
-          console.log(`Dental upper cell ${index}: ${arr[index]}`);
-          return [...arr];
-        });
-      } else {
-        this.selectedDentalCellsLower.update((arr) => {
-          arr[index] = !arr[index];
-          console.log(`Dental lower cell ${index}: ${arr[index]}`);
-          return [...arr];
-        });
-      }
-    }
+    const selectionKey = this.currentPersonDentalSelectionKey();
+    const personIndex = this.declaration.currentPersonIndex();
+    const selectionField: keyof DentalSelectionState = isParodontitis
+      ? isUpper
+        ? 'parodontitisUpper'
+        : 'parodontitisLower'
+      : isUpper
+        ? 'dentalUpper'
+        : 'dentalLower';
+
+    this.personDentalSelections.update((existing) => {
+      const currentState = existing[selectionKey] ?? this.createEmptyDentalSelectionState();
+      const nextValues = [...currentState[selectionField]];
+      nextValues[index] = !nextValues[index];
+
+      const nextState: DentalSelectionState = {
+        ...currentState,
+        [selectionField]: nextValues,
+      };
+
+      this.logDentalSelection(personIndex, selectionKey, nextState);
+
+      return {
+        ...existing,
+        [selectionKey]: nextState,
+      };
+    });
   }
 }

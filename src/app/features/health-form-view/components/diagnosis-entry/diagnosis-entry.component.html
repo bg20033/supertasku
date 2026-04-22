@@ -82,7 +82,6 @@
           Bitte den gültigen Beginn (Monat/Jahr) erfassen.
         </small>
       }
-
       @if (
         (control('to')?.touched || control('to')?.dirty) &&
         !(control('to')?.value | dateValidation)
@@ -91,7 +90,6 @@
           Bitte das gültige Ende (Monat/Jahr) erfassen.
         </small>
       }
-
       @if (showDateOrderError()) {
         <small class="diagnosis-entry__error diagnosis-entry__error--visible">
           Das Ende darf nicht vor dem Beginn liegen.

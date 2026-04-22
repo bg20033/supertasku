@@ -293,7 +293,8 @@
 }
 
 .family-member__year-field input::placeholder {
-  color: #aa98be;
+  color: #a893bd;
+  font-weight: 400;
 }
 
 .family-member__year-icon {
@@ -478,7 +479,8 @@
 }
 
 .location-input input::placeholder {
-  color: #aa98be;
+  color: #a893bd;
+  font-weight: 400;
 }
 
 .location-input input.has-selection {
