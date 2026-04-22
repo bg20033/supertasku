@@ -26,10 +26,11 @@
       class="diagnosis-entry__error"
       [class.diagnosis-entry__error--visible]="
         (control('condition')?.touched || control('condition')?.dirty) &&
-        !(control('condition')?.value | requiredValidation)
+        (!(control('condition')?.value | requiredValidation) ||
+          !(control('condition')?.value | minLengthValidation: 5))
       "
     >
-      Bitte die Diagnose oder das Ereignis erfassen.
+      Bitte die Diagnose oder das Ereignis mit mindestens 5 Zeichen erfassen.
     </small>
   </label>
 
@@ -51,15 +52,6 @@
           </svg>
         </span>
       </div>
-      <small
-        class="diagnosis-entry__error"
-        [class.diagnosis-entry__error--visible]="
-          (control('from')?.touched || control('from')?.dirty) &&
-          !(control('from')?.value | requiredValidation)
-        "
-      >
-        Bitte den Beginn erfassen.
-      </small>
     </label>
 
     <label class="diagnosis-entry__field" [for]="fieldId('to')">
@@ -80,6 +72,34 @@
         </span>
       </div>
     </label>
+    <div class="col-span-full">
+    <small
+        class="diagnosis-entry__error"
+        [class.diagnosis-entry__error--visible]="
+          (control('from')?.touched || control('from')?.dirty) &&
+          (!(control('from')?.value | requiredValidation) ||
+            !(control('from')?.value | dateValidation))
+        "
+      >
+        Bitte den gültigen Beginn (Monat/Jahr) erfassen.
+      </small>
+    <small
+        class="diagnosis-entry__error"
+        [class.diagnosis-entry__error--visible]="
+          (control('to')?.touched || control('to')?.dirty) &&
+          !(control('to')?.value | dateValidation)
+        "
+      >
+        Bitte das gültige Ende (Monat/Jahr) erfassen.
+      </small>
+
+  <small
+    class="diagnosis-entry__error"
+    [class.diagnosis-entry__error--visible]="showDateOrderError()"
+  >
+    Das Ende darf nicht vor dem Beginn liegen.
+  </small>
+    </div>
   </div>
 
   <div class="diagnosis-entry__field diagnosis-entry__field--full">
@@ -113,78 +133,78 @@
         class="diagnosis-entry__field diagnosis-entry__field--doctor-given"
         [for]="fieldId('doctorGivenNames')"
       >
-        <input
-          class="diagnosis-entry__control"
+        <textarea
+          class="diagnosis-entry__control diagnosis-entry__control--textarea"
           [id]="fieldId('doctorGivenNames')"
-          type="text"
           formControlName="doctorGivenNames"
           placeholder="Dr.med.Johannes"
-        />
+          rows="1"
+        ></textarea>
       </label>
 
       <label
         class="diagnosis-entry__field diagnosis-entry__field--doctor-family"
         [for]="fieldId('doctorFamilyName')"
       >
-        <input
-          class="diagnosis-entry__control"
+        <textarea
+          class="diagnosis-entry__control diagnosis-entry__control--textarea"
           [id]="fieldId('doctorFamilyName')"
-          type="text"
           formControlName="doctorFamilyName"
           placeholder="Doktormann"
-        />
+          rows="1"
+        ></textarea>
       </label>
 
       <label
         class="diagnosis-entry__field diagnosis-entry__field--street"
         [for]="fieldId('doctorStreet')"
       >
-        <input
-          class="diagnosis-entry__control"
+        <textarea
+          class="diagnosis-entry__control diagnosis-entry__control--textarea"
           [id]="fieldId('doctorStreet')"
-          type="text"
           formControlName="doctorStreet"
           placeholder="Doktorstrasse"
-        />
+          rows="1"
+        ></textarea>
       </label>
 
       <label
         class="diagnosis-entry__field diagnosis-entry__field--house-number"
         [for]="fieldId('doctorStreetNumber')"
       >
-        <input
-          class="diagnosis-entry__control"
+        <textarea
+          class="diagnosis-entry__control diagnosis-entry__control--textarea"
           [id]="fieldId('doctorStreetNumber')"
-          type="text"
           formControlName="doctorStreetNumber"
           placeholder="1"
-        />
+          rows="1"
+        ></textarea>
       </label>
 
       <label
         class="diagnosis-entry__field diagnosis-entry__field--postal"
         [for]="fieldId('doctorPostalCode')"
       >
-        <input
-          class="diagnosis-entry__control"
+        <textarea
+          class="diagnosis-entry__control diagnosis-entry__control--textarea"
           [id]="fieldId('doctorPostalCode')"
-          type="text"
           formControlName="doctorPostalCode"
           placeholder="8001"
-        />
+          rows="1"
+        ></textarea>
       </label>
 
       <label
         class="diagnosis-entry__field diagnosis-entry__field--city"
         [for]="fieldId('doctorCity')"
       >
-        <input
-          class="diagnosis-entry__control"
+        <textarea
+          class="diagnosis-entry__control diagnosis-entry__control--textarea"
           [id]="fieldId('doctorCity')"
-          type="text"
           formControlName="doctorCity"
           placeholder="Zurich"
-        />
+          rows="1"
+        ></textarea>
       </label>
     </div>
   </div>
@@ -198,11 +218,4 @@
       placeholder="Hier eingeben..."
     ></textarea>
   </label>
-
-  <small
-    class="diagnosis-entry__error"
-    [class.diagnosis-entry__error--visible]="showDateOrderError()"
-  >
-    Das Ende darf nicht vor dem Beginn liegen.
-  </small>
 </section>

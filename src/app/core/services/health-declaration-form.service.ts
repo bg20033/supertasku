@@ -411,6 +411,43 @@ function minItemsValidator(minimum: number): ValidatorFn {
   };
 }
 
+function dateValidator(control: AbstractControl): ValidationErrors | null {
+  const value = control.value as string;
+
+  if (!value) {
+    return null; // Empty is valid for optional fields
+  }
+
+  // Check format YYYY-MM
+  const datePattern = /^\d{4}-\d{2}$/;
+  if (!datePattern.test(value)) {
+    return { invalidDate: true };
+  }
+
+  // Parse year and month
+  const [yearStr, monthStr] = value.split('-');
+  const year = parseInt(yearStr, 10);
+  const month = parseInt(monthStr, 10);
+
+  // Validate month 1-12
+  if (month < 1 || month > 12) {
+    return { invalidDate: true };
+  }
+
+  // Validate year (reasonable range, e.g., 1900-2100)
+  if (year < 1900 || year > 2100) {
+    return { invalidDate: true };
+  }
+
+  // Check if it's a valid date (e.g., not Feb 30)
+  const date = new Date(year, month - 1, 1);
+  if (date.getFullYear() !== year || date.getMonth() !== month - 1) {
+    return { invalidDate: true };
+  }
+
+  return null;
+}
+
 function dateOrderValidator(fromKey: string, toKey: string): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
     if (!(control instanceof FormGroup)) {
@@ -997,9 +1034,9 @@ export class HealthDeclarationFormService {
         name: this.fb.control(''),
         amountPerDay: this.fb.control(''),
         duration: this.fb.control(''),
-        condition: this.fb.control('', [Validators.required, Validators.minLength(2)]),
-        from: this.fb.control('', Validators.required),
-        to: this.fb.control(''),
+        condition: this.fb.control('', [Validators.required, Validators.minLength(5)]),
+        from: this.fb.control('', [Validators.required, dateValidator]),
+        to: this.fb.control('', dateValidator),
         recovered: this.fb.control<YesNoAnswer>('', Validators.required),
         doctorGivenNames: this.fb.control('', [Validators.required, Validators.minLength(2)]),
         doctorFamilyName: this.fb.control('', [Validators.required, Validators.minLength(2)]),

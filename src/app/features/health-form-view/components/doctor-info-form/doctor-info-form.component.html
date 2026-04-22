@@ -70,6 +70,12 @@
       ) {
         <span class="field-error">Die Straße ist erforderlich.</span>
       }
+      @if (
+        (group().get('streetNumber')?.touched || group().get('streetNumber')?.dirty) &&
+        !(group().get('streetNumber')?.value | requiredValidation)
+      ) {
+        <span class="field-error flex">Die Hausnummer ist erforderlich.</span>
+      }
     </div>
 
     <div class="field" style="grid-column: span 4">
@@ -82,12 +88,7 @@
     </div>
 
     <div class="field-error-container" style="grid-column: span 12">
-      @if (
-        (group().get('streetNumber')?.touched || group().get('streetNumber')?.dirty) &&
-        !(group().get('streetNumber')?.value | requiredValidation)
-      ) {
-        <span class="field-error flex">Die Hausnummer ist erforderlich.</span>
-      }
+      
       @if (
         (group().get('postalCode')?.touched || group().get('postalCode')?.dirty) &&
         !(group().get('postalCode')?.value | requiredValidation)

@@ -1,10 +1,19 @@
 import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
 import { AbstractControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { RequiredValidationPipe } from '../../../../core/pipes';
+import {
+  DateValidationPipe,
+  MinLengthValidationPipe,
+  RequiredValidationPipe,
+} from '../../../../core/pipes';
 
 @Component({
   selector: 'app-diagnosis-entry',
-  imports: [ReactiveFormsModule, RequiredValidationPipe],
+  imports: [
+    ReactiveFormsModule,
+    DateValidationPipe,
+    MinLengthValidationPipe,
+    RequiredValidationPipe,
+  ],
   templateUrl: './diagnosis-entry.component.html',
   styleUrl: './diagnosis-entry.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
