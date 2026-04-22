@@ -284,6 +284,7 @@ textarea:not(.diagnosis-entry__control--textarea)::-webkit-resizer {
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 0.35rem;
   min-width: 0;
+  position: relative;
   height: var(--control-height);
   padding: 0.25rem;
   overflow: hidden;
@@ -291,6 +292,23 @@ textarea:not(.diagnosis-entry__control--textarea)::-webkit-resizer {
   border-radius: 10px;
   background: #e6d9f4;
   box-sizing: border-box;
+}
+
+.diagnosis-entry__toggle::after {
+  content: '';
+  position: absolute;
+  top: 0.7rem;
+  bottom: 0.7rem;
+  left: 50%;
+  width: 1px;
+  transform: translateX(-50%);
+  background: rgba(125, 41, 222, 0.18);
+  pointer-events: none;
+  transition: opacity 140ms ease;
+}
+
+.diagnosis-entry__toggle:has(input:checked)::after {
+  opacity: 0;
 }
 
 .diagnosis-entry__toggle-option {
