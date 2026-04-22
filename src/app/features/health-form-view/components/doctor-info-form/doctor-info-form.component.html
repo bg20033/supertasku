@@ -55,8 +55,8 @@
     </div>
 
     <div class="field" style="grid-column: span 7">
-      <label for="doctorStreet">Strasse</label>
-      <input id="doctorStreet" type="text" formControlName="street" placeholder="Strasse" />
+      <label for="doctorStreet">Straße</label>
+      <input id="doctorStreet" type="text" formControlName="street" placeholder="Straße" />
     </div>
 
     <div class="field" style="grid-column: span 5">
@@ -68,7 +68,7 @@
         (group().get('street')?.touched || group().get('street')?.dirty) &&
         !(group().get('street')?.value | requiredValidation)
       ) {
-        <span class="field-error">Die Strasse ist erforderlich.</span>
+        <span class="field-error">Die Straße ist erforderlich.</span>
       }
     </div>
 
@@ -76,7 +76,6 @@
       <label for="doctorPostalCode">PLZ</label>
       <input id="doctorPostalCode" type="number" formControlName="postalCode" placeholder="PLZ" />
     </div>
-
     <div class="field" style="grid-column: span 8">
       <label for="doctorCity">Ort</label>
       <input id="doctorCity" type="text" formControlName="city" placeholder="Ort" />
@@ -90,12 +89,17 @@
         <span class="field-error flex">Die Hausnummer ist erforderlich.</span>
       }
       @if (
+        (group().get('postalCode')?.touched || group().get('postalCode')?.dirty) &&
+        !(group().get('postalCode')?.value | requiredValidation)
+      ) {
+        <span class="field-error flex">Die PLZ ist erforderlich.</span>
+      }
+      @if (
         (group().get('city')?.touched || group().get('city')?.dirty) &&
         !(group().get('city')?.value | requiredValidation)
       ) {
         <span class="field-error flex">Der Ort ist erforderlich.</span>
       }
     </div>
-    
   </div>
 </article>
