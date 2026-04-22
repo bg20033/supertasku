@@ -353,8 +353,7 @@ textarea:not(.diagnosis-entry__control--textarea)::-webkit-resizer {
 .three-option-toggle-option {
   position: relative;
   min-width: auto;
-  height: 100%;   
-
+  height: 100%;
 }
 
 .three-option-toggle-option input {
@@ -388,6 +387,39 @@ textarea:not(.diagnosis-entry__control--textarea)::-webkit-resizer {
   color: #17111e;
   border-color: rgba(125, 41, 222, 0.22);
   box-shadow: 0 1px 2px rgba(70, 24, 128, 0.12);
+}
+
+.three-option-toggle--rebuild {
+  display: flex;
+  align-items: stretch;
+  overflow: unset;
+}
+
+.three-option-toggle-option--rebuild {
+  flex: 1 1 0;
+  display: block;
+  min-width: 0;
+  height: auto;
+}
+
+.three-option-toggle-option--rebuild span {
+  display: flex;
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 100%;
+  min-height: 0;
+  padding: 0 0.75rem;
+  cursor: pointer;
+  user-select: none;
+  transition:
+    background-color 160ms ease,
+    color 180ms ease,
+    border-color 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.three-option-toggle-option--rebuild input:focus-visible + span {
+  box-shadow: 0 0 0 3px rgba(125, 41, 222, 0.16);
 }
 
 .divider-line {

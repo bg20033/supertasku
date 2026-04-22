@@ -11,7 +11,7 @@
     </div>
   }
 
-  <label class="diagnosis-entry__field diagnosis-entry__field--full" [for]="fieldId('condition')">
+  <label class="diagnosis-entry__field diagnosis-entry__field--full">
     <span
       >Diagnose/Krankheiten/Stoerungen/Beschwerden/Verletzung/betroffene Seite,
       links/rechts/beidseits/Operation?</span
@@ -35,7 +35,7 @@
   </label>
 
   <div class="diagnosis-entry__dates">
-    <label class="diagnosis-entry__field" [for]="fieldId('from')">
+    <label class="diagnosis-entry__field">
       <span>Beginn (Monat/Jahr)</span>
       <div class="diagnosis-entry__date-shell">
         <input
@@ -54,7 +54,7 @@
       </div>
     </label>
 
-    <label class="diagnosis-entry__field" [for]="fieldId('to')">
+    <label class="diagnosis-entry__field">
       <span>Ende (Monat/Jahr)</span>
       <div class="diagnosis-entry__date-shell">
         <input
@@ -129,10 +129,7 @@
   <div class="diagnosis-entry__field diagnosis-entry__field--full">
     <span>Behandelnde/r Arzt/Aerztin, Therapeut/in</span>
     <div class="diagnosis-entry__doctor-grid">
-      <label
-        class="diagnosis-entry__field diagnosis-entry__field--doctor-given"
-        [for]="fieldId('doctorGivenNames')"
-      >
+      <label class="diagnosis-entry__field diagnosis-entry__field--doctor-given">
         <textarea
           class="diagnosis-entry__control diagnosis-entry__control--textarea"
           [id]="fieldId('doctorGivenNames')"
@@ -142,10 +139,7 @@
         ></textarea>
       </label>
 
-      <label
-        class="diagnosis-entry__field diagnosis-entry__field--doctor-family"
-        [for]="fieldId('doctorFamilyName')"
-      >
+      <label class="diagnosis-entry__field diagnosis-entry__field--doctor-family">
         <textarea
           class="diagnosis-entry__control diagnosis-entry__control--textarea"
           [id]="fieldId('doctorFamilyName')"
@@ -155,10 +149,7 @@
         ></textarea>
       </label>
 
-      <label
-        class="diagnosis-entry__field diagnosis-entry__field--street"
-        [for]="fieldId('doctorStreet')"
-      >
+      <label class="diagnosis-entry__field diagnosis-entry__field--street">
         <textarea
           class="diagnosis-entry__control diagnosis-entry__control--textarea"
           [id]="fieldId('doctorStreet')"
@@ -168,10 +159,7 @@
         ></textarea>
       </label>
 
-      <label
-        class="diagnosis-entry__field diagnosis-entry__field--house-number"
-        [for]="fieldId('doctorStreetNumber')"
-      >
+      <label class="diagnosis-entry__field diagnosis-entry__field--house-number">
         <textarea
           class="diagnosis-entry__control diagnosis-entry__control--textarea"
           [id]="fieldId('doctorStreetNumber')"
@@ -181,10 +169,7 @@
         ></textarea>
       </label>
 
-      <label
-        class="diagnosis-entry__field diagnosis-entry__field--postal"
-        [for]="fieldId('doctorPostalCode')"
-      >
+      <label class="diagnosis-entry__field diagnosis-entry__field--postal">
         <textarea
           class="diagnosis-entry__control diagnosis-entry__control--textarea"
           [id]="fieldId('doctorPostalCode')"
@@ -194,10 +179,7 @@
         ></textarea>
       </label>
 
-      <label
-        class="diagnosis-entry__field diagnosis-entry__field--city"
-        [for]="fieldId('doctorCity')"
-      >
+      <label class="diagnosis-entry__field diagnosis-entry__field--city">
         <textarea
           class="diagnosis-entry__control diagnosis-entry__control--textarea"
           [id]="fieldId('doctorCity')"
@@ -209,7 +191,7 @@
     </div>
   </div>
 
-  <label class="diagnosis-entry__field diagnosis-entry__field--full" [for]="fieldId('notes')">
+  <label class="diagnosis-entry__field diagnosis-entry__field--full">
     <span>Besondere Bemerkungen:</span>
     <textarea
       class="diagnosis-entry__control diagnosis-entry__control--textarea diagnosis-entry__control--notes"

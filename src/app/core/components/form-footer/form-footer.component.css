@@ -108,7 +108,5 @@
   .form-footer {
     position: static;
     backdrop-filter: none;
-    /* background: #ffffff; /* or your preferred color */
-    /* border-top: 1px solid rgba(193, 172, 222, 0.3); */
   }
 }

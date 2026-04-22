@@ -26,6 +26,7 @@
                   }
                 }
               }
+
               <app-doctor-info-form [group]="doctorInfoGroup(person)" />
 
               <app-body-metrics-form [group]="bodyMetricsGroup(person)" />
@@ -371,9 +372,9 @@
                   />
                   <div class="field dental-finding__condition">
                     <label class="fieldset-label">Zustand der Kronen, Bruecken und Prothesen</label>
-                    <div class="three-option-toggle">
+                    <div class="three-option-toggle three-option-toggle--rebuild">
                       @for (option of conditionOptions; track option) {
-                        <label class="three-option-toggle-option">
+                        <label class="three-option-toggle-option three-option-toggle-option--rebuild">
                           <input
                             type="radio"
                             formControlName="prosthesesCondition"
@@ -638,9 +639,9 @@
                 <div class="field-grid">
                   <div class="field" style="grid-column: span 12">
                     <label class="fieldset-label">18.1 Hygiene</label>
-                    <div class="three-option-toggle">
+                    <div class="three-option-toggle three-option-toggle--rebuild">
                       @for (option of conditionOptions; track option) {
-                        <label class="three-option-toggle-option">
+                        <label class="three-option-toggle-option three-option-toggle-option--rebuild">
                           <input
                             type="radio"
                             formControlName="hygiene"
